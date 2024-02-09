@@ -5,6 +5,7 @@ import java.util.Objects;
 import static org.evgenysav.TechnicalSpecialist.*;
 
 public class Vehicle implements Comparable<Vehicle> {
+    private Startable startable;
     private VehicleType type;
     private String modelName;
     private String registrationNumber;
@@ -18,9 +19,10 @@ public class Vehicle implements Comparable<Vehicle> {
 
     }
 
-    public Vehicle(VehicleType type, String modelName, String registrationNumber,
+    public Vehicle(Startable startable, VehicleType type, String modelName, String registrationNumber,
                    int weight, int manufactureYear, int mileage, Color color,
                    int tankVolume) {
+        setStartable(startable);
         setType(type);
         setModelName(modelName);
         setRegistrationNumber(registrationNumber);
@@ -32,7 +34,7 @@ public class Vehicle implements Comparable<Vehicle> {
     }
 
     public double getCalcTaxPerMonth() {
-        return (weight * 0.0013) + (type.getTaxCoefficient() * 30) + 5;
+        return (weight * 0.0013) + (type.getTaxCoefficient() * startable.getTaxPerMonth() * 30) + 5;
     }
 
     @Override
@@ -135,6 +137,43 @@ public class Vehicle implements Comparable<Vehicle> {
         this.color = null;
     }
 
+    public Startable getStartable() {
+        return startable;
+    }
+
+    public void setStartable(Startable startable) {
+        if (startable == null){
+            return;
+        }
+
+        if (startable instanceof ElectricalEngine o) {
+            if (validateElectricalEngine(o)) {
+                this.startable = startable;
+                return;
+            }
+
+            this.startable = null;
+        }
+        if (startable instanceof DieselEngine o){
+            if (validateDieselEngine(o)){
+                this.startable = startable;
+                return;
+            }
+
+            this.startable = null;
+        }
+        if (startable instanceof GasolineEngine o){
+            if (validateGasolineEngine(o)){
+                this.startable = startable;
+                return;
+            }
+
+            this.startable = null;
+        }
+
+
+    }
+
     public int getTankVolume() {
         return tankVolume;
     }
@@ -148,17 +187,23 @@ public class Vehicle implements Comparable<Vehicle> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Vehicle vehicle = (Vehicle) o;
-        return Objects.equals(type, vehicle.type) && Objects.equals(modelName, vehicle.modelName);
+        return weight == vehicle.weight && manufactureYear == vehicle.manufactureYear &&
+                mileage == vehicle.mileage && tankVolume == vehicle.tankVolume &&
+                Objects.equals(startable, vehicle.startable) &&
+                Objects.equals(type, vehicle.type) &&
+                Objects.equals(modelName, vehicle.modelName) &&
+                Objects.equals(registrationNumber, vehicle.registrationNumber) &&
+                color == vehicle.color;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(type, modelName);
+        return Objects.hash(startable, type, modelName, registrationNumber, weight, manufactureYear, mileage, color, tankVolume);
     }
 
     @Override
     public String toString() {
-        return type + "," + modelName + "," + registrationNumber + "," + weight + "," + manufactureYear
+        return startable.toString() + "," + type + "," + modelName + "," + registrationNumber + "," + weight + "," + manufactureYear
                 + "," + mileage + "," + color + "," + tankVolume + "," + getCalcTaxPerMonth();
     }
 }

@@ -75,4 +75,38 @@ public class TechnicalSpecialist {
         return false;
     }
 
+    public static boolean validateGasolineEngine(GasolineEngine engine) {
+        return validateCombustionEngine(engine);
+    }
+
+    public static boolean validateElectricalEngine(ElectricalEngine engine) {
+        if (engine.getTypeOfEngine() == null || engine.getTypeOfEngine().isEmpty()) {
+            return false;
+        }
+        if (engine.getTaxCoefficient() < 0 || engine.getBatterySize() < 0 ||
+                engine.getElectricityConsumption() < 0) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public static boolean validateDieselEngine(DieselEngine engine) {
+        return validateCombustionEngine(engine);
+    }
+
+    private static boolean validateCombustionEngine(CombustionEngine engine){
+        if (engine.getTypeOfEngine() == null || engine.getTypeOfEngine().isEmpty()) {
+            return false;
+        }
+
+        if (engine.getEngineCapacity() < 0 || engine.getFuelTankCapacity() < 0 ||
+                engine.getFuelConsumptionPer100() < 0 || engine.getTaxCoefficient() < 0) {
+            return false;
+        }
+
+        return true;
+    }
+
+
 }
