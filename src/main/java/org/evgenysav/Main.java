@@ -8,10 +8,14 @@ import java.util.stream.Stream;
 
 public class Main {
     public static void main(String[] args) {
-        VehicleType bus = new VehicleType("Bus", 1.2);
-        VehicleType car = new VehicleType("Car", 1);
-        VehicleType rink = new VehicleType("Rink", 1.5);
-        VehicleType tractor = new VehicleType("Tractor", 1.2);
+        VehicleType bus = VehicleType.BUS;
+        VehicleType car = VehicleType.CAR;
+        VehicleType rink = VehicleType.RINK;
+        VehicleType tractor = VehicleType.TRACTOR;
+//        VehicleType bus = new VehicleType("Bus", 1.2);
+//        VehicleType car = new VehicleType("Car", 1);
+//        VehicleType rink = new VehicleType("Rink", 1.5);
+//        VehicleType tractor = new VehicleType("Tractor", 1.2);
         VehicleType[] types = new VehicleType[]{bus, car, rink, tractor};
 
         Random random = new Random();

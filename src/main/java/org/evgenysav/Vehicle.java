@@ -142,7 +142,7 @@ public class Vehicle implements Comparable<Vehicle> {
     }
 
     public void setStartable(Startable startable) {
-        if (startable == null){
+        if (startable == null) {
             return;
         }
 
@@ -154,24 +154,22 @@ public class Vehicle implements Comparable<Vehicle> {
 
             this.startable = null;
         }
-        if (startable instanceof DieselEngine o){
-            if (validateDieselEngine(o)){
+        if (startable instanceof DieselEngine o) {
+            if (validateDieselEngine(o)) {
                 this.startable = startable;
                 return;
             }
 
             this.startable = null;
         }
-        if (startable instanceof GasolineEngine o){
-            if (validateGasolineEngine(o)){
+        if (startable instanceof GasolineEngine o) {
+            if (validateGasolineEngine(o)) {
                 this.startable = startable;
                 return;
             }
 
             this.startable = null;
         }
-
-
     }
 
     public int getTankVolume() {
@@ -187,12 +185,9 @@ public class Vehicle implements Comparable<Vehicle> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Vehicle vehicle = (Vehicle) o;
-        return weight == vehicle.weight && manufactureYear == vehicle.manufactureYear &&
-                mileage == vehicle.mileage && tankVolume == vehicle.tankVolume &&
-                Objects.equals(startable, vehicle.startable) &&
-                Objects.equals(type, vehicle.type) &&
-                Objects.equals(modelName, vehicle.modelName) &&
-                Objects.equals(registrationNumber, vehicle.registrationNumber) &&
+        return weight == vehicle.weight && manufactureYear == vehicle.manufactureYear && mileage == vehicle.mileage &&
+                tankVolume == vehicle.tankVolume && Objects.equals(startable, vehicle.startable) && type == vehicle.type &&
+                Objects.equals(modelName, vehicle.modelName) && Objects.equals(registrationNumber, vehicle.registrationNumber) &&
                 color == vehicle.color;
     }
 
@@ -204,6 +199,6 @@ public class Vehicle implements Comparable<Vehicle> {
     @Override
     public String toString() {
         return startable.toString() + "," + type + "," + modelName + "," + registrationNumber + "," + weight + "," + manufactureYear
-                + "," + mileage + "," + color + "," + tankVolume + "," + getCalcTaxPerMonth();
+                + "," + mileage + "," + color + "," + tankVolume + "," + String.format("%.3f", getCalcTaxPerMonth());
     }
 }
