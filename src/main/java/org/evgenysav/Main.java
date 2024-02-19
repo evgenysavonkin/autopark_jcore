@@ -1,9 +1,6 @@
 package org.evgenysav;
 
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Stream;
 
 public class Main {
@@ -12,35 +9,66 @@ public class Main {
         VehicleType car = VehicleType.CAR;
         VehicleType rink = VehicleType.RINK;
         VehicleType tractor = VehicleType.TRACTOR;
-//        VehicleType bus = new VehicleType("Bus", 1.2);
-//        VehicleType car = new VehicleType("Car", 1);
-//        VehicleType rink = new VehicleType("Rink", 1.5);
-//        VehicleType tractor = new VehicleType("Tractor", 1.2);
         VehicleType[] types = new VehicleType[]{bus, car, rink, tractor};
-
         Random random = new Random();
-        Vehicle vehicle1 = new Vehicle(new GasolineEngine(2, 8.1, 75),
-                types[0], "Volkswagen Crafter", "5427 AX-7",
-                2022, 2015, 37600, Color.BLUE, random.nextInt(100));
-        Vehicle vehicle2 = new Vehicle(new GasolineEngine(2.18, 8.5, 75),
-                types[0], "Volkswagen Crafter", "6427 AA-7",
-                2500, 2014, 227010, Color.WHITE, random.nextInt(100));
-        Vehicle vehicle3 = new Vehicle(new ElectricalEngine(50, 150),
-                types[0], "Electric Bus E321", "6785 BA-7",
-                12080, 2019, 20451, Color.GREEN, random.nextInt(100));
-        Vehicle vehicle4 = new Vehicle(new DieselEngine(1.6, 7.2, 55),
-                types[1], "Golf 5", "8682 AX-7",
-                1200, 2006, 230451, Color.GRAY, random.nextInt(100));
-        Vehicle vehicle5 = new Vehicle(new ElectricalEngine(25, 70),
-                types[1], "Tesla Model S 70D", "0001 AA-7",
-                2200, 2019, 10454, Color.WHITE, random.nextInt(100));
-        Vehicle vehicle6 = new Vehicle(new DieselEngine(3.2, 25, 20),
-                types[2], "Hamm HD 12 VV", null,
-                3000, 2016, 122, Color.YELLOW, random.nextInt(100));
-        Vehicle vehicle7 = new Vehicle(new DieselEngine(4.75, 20.1, 135),
-                types[3], "МТЗ Беларус-1025.4", "1145 AB-7",
-                1200, 2020, 109, Color.RED, random.nextInt(100));
-        Vehicle[] vehicles = new Vehicle[]{vehicle1, vehicle2, vehicle3, vehicle4, vehicle5, vehicle6, vehicle7};
+        List<Vehicle> createdSuccessfully = new ArrayList<>();
+        try {
+            Vehicle vehicle1 = new Vehicle(new GasolineEngine(2, 8.1, 75),
+                    types[0], "Volkswagen Crafter", "5427 AX-7",
+                    2022, 2015, 37600, Color.BLUE, random.nextInt(100));
+            createdSuccessfully.add(vehicle1);
+        } catch (NotVehicleException e) {
+            System.err.println(e.getMessage());
+        }
+        try {
+            Vehicle vehicle2 = new Vehicle(new GasolineEngine(2.18, 8.5, 75),
+                    types[0], "Volkswagen Crafter", "6427 AA-7",
+                    2500, 2014, 227010, Color.WHITE, random.nextInt(100));
+            createdSuccessfully.add(vehicle2);
+        } catch (NotVehicleException e) {
+            System.err.println(e.getMessage());
+        }
+        try {
+            Vehicle vehicle3 = new Vehicle(new ElectricalEngine(50, 150),
+                    types[0], "Electric Bus E321", "6785 BA-7",
+                    12080, 2019, 20451, Color.GREEN, random.nextInt(100));
+            createdSuccessfully.add(vehicle3);
+        } catch (NotVehicleException e) {
+            System.err.println(e.getMessage());
+        }
+        try {
+            Vehicle vehicle4 = new Vehicle(new DieselEngine(1.6, 7.2, 55),
+                    types[1], "Golf 5", "8682 AX-7",
+                    1200, 2006, 230451, Color.GRAY, random.nextInt(100));
+            createdSuccessfully.add(vehicle4);
+        } catch (NotVehicleException e) {
+            System.err.println(e.getMessage());
+        }
+        try {
+            Vehicle vehicle5 = new Vehicle(new ElectricalEngine(25, 70),
+                    types[1], "Tesla Model S 70D", "0001 AA-7",
+                    2200, 2019, 10454, Color.WHITE, random.nextInt(100));
+            createdSuccessfully.add(vehicle5);
+        } catch (NotVehicleException e) {
+            System.err.println(e.getMessage());
+        }
+        try {
+            Vehicle vehicle6 = new Vehicle(new DieselEngine(3.2, 25, 20),
+                    types[2], "Hamm HD 12 VV", null,
+                    3000, 2016, 122, Color.YELLOW, random.nextInt(100));
+            createdSuccessfully.add(vehicle6);
+        } catch (NotVehicleException e) {
+            System.err.println(e.getMessage());
+        }
+        try {
+            Vehicle vehicle7 = new Vehicle(new DieselEngine(4.75, 20.1, 135),
+                    types[3], "МТЗ Беларус-1025.4", "1145 AB-7",
+                    1200, 2020, 109, Color.RED, random.nextInt(100));
+            createdSuccessfully.add(vehicle7);
+        } catch (NotVehicleException e) {
+            System.err.println(e.getMessage());
+        }
+        Vehicle[] vehicles = createdSuccessfully.toArray(new Vehicle[0]);
         Helper.printCars(vehicles);
         Helper.printDuplicates(vehicles);
         Helper.printMaxKilometersVehicle(vehicles);

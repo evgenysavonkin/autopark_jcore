@@ -21,7 +21,7 @@ public class Vehicle implements Comparable<Vehicle> {
 
     public Vehicle(Startable startable, VehicleType type, String modelName, String registrationNumber,
                    int weight, int manufactureYear, int mileage, Color color,
-                   int tankVolume) {
+                   int tankVolume) throws NotVehicleException {
         setStartable(startable);
         setType(type);
         setModelName(modelName);
@@ -50,7 +50,7 @@ public class Vehicle implements Comparable<Vehicle> {
         return type;
     }
 
-    public void setType(VehicleType type) {
+    public void setType(VehicleType type) throws NotVehicleException {
         if (validateVehicleType(type)) {
             this.type = type;
             return;
@@ -63,7 +63,7 @@ public class Vehicle implements Comparable<Vehicle> {
         return modelName;
     }
 
-    public void setModelName(String modelName) {
+    public void setModelName(String modelName) throws NotVehicleException {
         if (validateModelName(modelName)) {
             this.modelName = modelName;
             return;
@@ -76,7 +76,7 @@ public class Vehicle implements Comparable<Vehicle> {
         return registrationNumber;
     }
 
-    public void setRegistrationNumber(String registrationNumber) {
+    public void setRegistrationNumber(String registrationNumber) throws NotVehicleException {
         if (validateRegistrationNumber(registrationNumber)) {
             this.registrationNumber = registrationNumber;
             return;
@@ -89,7 +89,7 @@ public class Vehicle implements Comparable<Vehicle> {
         return weight;
     }
 
-    public void setWeight(int weight) {
+    public void setWeight(int weight) throws NotVehicleException {
         if (validateWeight(weight)) {
             this.weight = weight;
             return;
@@ -102,7 +102,7 @@ public class Vehicle implements Comparable<Vehicle> {
         return manufactureYear;
     }
 
-    public void setManufactureYear(int manufactureYear) {
+    public void setManufactureYear(int manufactureYear) throws NotVehicleException {
         if (validateManufactureYear(manufactureYear)) {
             this.manufactureYear = manufactureYear;
             return;
@@ -115,7 +115,7 @@ public class Vehicle implements Comparable<Vehicle> {
         return mileage;
     }
 
-    public void setMileage(int mileage) {
+    public void setMileage(int mileage) throws NotVehicleException {
         if (validateMileage(mileage)) {
             this.mileage = mileage;
             return;
@@ -128,7 +128,7 @@ public class Vehicle implements Comparable<Vehicle> {
         return color;
     }
 
-    public void setColor(Color color) {
+    public void setColor(Color color) throws NotVehicleException {
         if (validateColor(color)) {
             this.color = color;
             return;
@@ -141,7 +141,7 @@ public class Vehicle implements Comparable<Vehicle> {
         return startable;
     }
 
-    public void setStartable(Startable startable) {
+    public void setStartable(Startable startable) throws NotVehicleException {
         if (startable == null) {
             return;
         }
