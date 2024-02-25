@@ -1,10 +1,14 @@
 package org.evgenysav;
 
+import java.util.List;
 import java.util.Objects;
 
 import static org.evgenysav.TechnicalSpecialist.*;
 
 public class Vehicle implements Comparable<Vehicle> {
+    private int vehicleId;
+    private int vehicleTypeId;
+    private List<Rent> machineOrders;
     private Startable startable;
     private VehicleType type;
     private String modelName;
@@ -16,7 +20,6 @@ public class Vehicle implements Comparable<Vehicle> {
     private int tankVolume;
 
     public Vehicle() {
-
     }
 
     public Vehicle(Startable startable, VehicleType type, String modelName, String registrationNumber,
@@ -31,6 +34,31 @@ public class Vehicle implements Comparable<Vehicle> {
         setMileage(mileage);
         setColor(color);
         setTankVolume(tankVolume);
+    }
+
+    public Vehicle(int vehicleId, int vehicleTypeId, Startable startable, VehicleType type, String modelName, String registrationNumber,
+                   int weight, int manufactureYear, int mileage, Color color,
+                   int tankVolume) throws NotVehicleException {
+        this.vehicleId = vehicleId;
+        this.vehicleTypeId = vehicleTypeId;
+        setStartable(startable);
+        setType(type);
+        setModelName(modelName);
+        setRegistrationNumber(registrationNumber);
+        setWeight(weight);
+        setManufactureYear(manufactureYear);
+        setMileage(mileage);
+        setColor(color);
+        setTankVolume(tankVolume);
+    }
+
+
+    public double getTotalIncome() {
+        return machineOrders.stream().mapToDouble(Rent::getRentCost).sum();
+    }
+
+    public double getTotalProfit() {
+        return getTotalIncome() - getCalcTaxPerMonth();
     }
 
     public double getCalcTaxPerMonth() {
@@ -172,12 +200,36 @@ public class Vehicle implements Comparable<Vehicle> {
         }
     }
 
+    public int getVehicleId() {
+        return vehicleId;
+    }
+
+    public void setVehicleId(int vehicleId) {
+        this.vehicleId = vehicleId;
+    }
+
+    public List<Rent> getMachineOrders() {
+        return machineOrders;
+    }
+
+    public void setMachineOrders(List<Rent> machineOrders) {
+        this.machineOrders = machineOrders;
+    }
+
     public int getTankVolume() {
         return tankVolume;
     }
 
     public void setTankVolume(int tankVolume) {
         this.tankVolume = tankVolume;
+    }
+
+    public int getVehicleTypeId() {
+        return vehicleTypeId;
+    }
+
+    public void setVehicleTypeId(int vehicleTypeId) {
+        this.vehicleTypeId = vehicleTypeId;
     }
 
     @Override
