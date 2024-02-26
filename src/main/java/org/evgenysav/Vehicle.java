@@ -52,6 +52,9 @@ public class Vehicle implements Comparable<Vehicle> {
         setTankVolume(tankVolume);
     }
 
+    public Vehicle(String modelName){
+        this.modelName = modelName;
+    }
 
     public double getTotalIncome() {
         return machineOrders.stream().mapToDouble(Rent::getRentCost).sum();
