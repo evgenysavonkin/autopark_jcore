@@ -52,6 +52,10 @@ public class Vehicle implements Comparable<Vehicle> {
         setTankVolume(tankVolume);
     }
 
+    public Vehicle(String modelName){
+        this.modelName = modelName;
+    }
+
 
     public double getTotalIncome() {
         return machineOrders.stream().mapToDouble(Rent::getRentCost).sum();
@@ -250,6 +254,9 @@ public class Vehicle implements Comparable<Vehicle> {
 
     @Override
     public String toString() {
+        if (startable == null){
+            return modelName;
+        }
         return startable.toString() + "," + type + "," + modelName + "," + registrationNumber + "," + weight + "," + manufactureYear
                 + "," + mileage + "," + color + "," + tankVolume + "," + String.format("%.3f", getCalcTaxPerMonth());
     }
