@@ -18,7 +18,7 @@ public class VehicleCollection {
         vehicles = loadVehicles(vehiclesFileName);
     }
 
-    public List<VehicleType> loadTypes(String inFile) {
+    private List<VehicleType> loadTypes(String inFile) {
         try {
             return FileActions.getVehicleTypesFromFile(inFile);
         } catch (IOException e) {
@@ -26,7 +26,7 @@ public class VehicleCollection {
         }
     }
 
-    public List<Rent> loadRents(String inFile) {
+    private List<Rent> loadRents(String inFile) {
         try {
             return FileActions.getRentsFromFile(inFile);
         } catch (IOException e) {
@@ -34,7 +34,7 @@ public class VehicleCollection {
         }
     }
 
-    public List<Vehicle> loadVehicles(String inFile) {
+    private List<Vehicle> loadVehicles(String inFile) {
         try {
             return FileActions.getVehiclesFromFile(inFile, vehicleTypes, rents);
         } catch (IOException e) {
