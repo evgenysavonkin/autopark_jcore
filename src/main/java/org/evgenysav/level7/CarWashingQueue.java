@@ -2,30 +2,32 @@ package org.evgenysav.level7;
 
 import org.evgenysav.Vehicle;
 
-public class CarWashingQueue {
-    private Vehicle[] vehicles;
+public class CarWashingQueue<T> {
+    private T[] elements;
     private int size;
 
     public CarWashingQueue(int size) {
-        vehicles = new Vehicle[size];
+        elements = (T[]) new Object[size];
+
     }
 
     public CarWashingQueue() {
-        vehicles = new Vehicle[10];
+        elements = (T[]) new Object[10];
+//        elements = new Vehicle[10];
     }
 
-    public void enqueue(Vehicle vehicle) {
-        if (size == vehicles.length) {
+    public void enqueue(T t) {
+        if (size == elements.length) {
             grow();
         }
         int indexToInsert = getInsertIndex();
         if (indexToInsert != -1) {
-            vehicles[indexToInsert] = vehicle;
+            elements[indexToInsert] = t;
             size++;
         }
     }
 
-    public Vehicle dequeue() {
+    public T dequeue() {
         if (isEmpty()) {
             throw new IllegalStateException("Queue is empty");
         }
@@ -33,13 +35,13 @@ public class CarWashingQueue {
         return removeFirst();
     }
 
-    public Vehicle peek() {
+    public T peek() {
         if (isEmpty()) {
             throw new IllegalStateException("Queue is empty");
         }
 
         if (size >= 2) {
-            return vehicles[1];
+            return elements[1];
         }
 
         throw new IllegalStateException("There is only one element in a queue");
@@ -51,26 +53,27 @@ public class CarWashingQueue {
 
     public void printVehicles() {
         System.out.println();
-        for (Vehicle v : vehicles) {
-            if (v != null) {
-                System.out.println(v.getModelName());
+        for (T t : elements) {
+            if (t != null) {
+                System.out.println(t);
+//                System.out.println(v.getModelName());
             }
         }
     }
 
-    private Vehicle removeFirst() {
-        Vehicle firstVehicle = vehicles[0];
-        vehicles[0] = null;
-        for (int i = 1; i < vehicles.length; i++) {
-            if (vehicles[i] != null) {
-                Vehicle temp = vehicles[i];
-                vehicles[i - 1] = temp;
-                vehicles[i] = null;
+    private T removeFirst() {
+        T firstElement = elements[0];
+        elements[0] = null;
+        for (int i = 1; i < elements.length; i++) {
+            if (elements[i] != null) {
+                T temp = elements[i];
+                elements[i - 1] = temp;
+                elements[i] = null;
             }
         }
         size--;
 
-        return firstVehicle;
+        return firstElement;
     }
 
     private boolean isEmpty() {
@@ -79,8 +82,8 @@ public class CarWashingQueue {
 
     private int getInsertIndex() {
         int counter = 0;
-        for (Vehicle v : vehicles) {
-            if (v == null) {
+        for (T t : elements) {
+            if (t == null) {
                 return counter;
             }
             counter++;
@@ -90,10 +93,10 @@ public class CarWashingQueue {
     }
 
     private void grow() {
-        int oldCapacity = vehicles.length;
+        int oldCapacity = elements.length;
         int newCapacity = 2 * oldCapacity;
-        Vehicle[] dest = new Vehicle[newCapacity];
-        System.arraycopy(vehicles, 0, dest, 0, oldCapacity);
-        vehicles = dest.clone();
+        T[] dest = (T[]) new Object[newCapacity];
+        System.arraycopy(elements, 0, dest, 0, oldCapacity);
+        elements = dest.clone();
     }
 }

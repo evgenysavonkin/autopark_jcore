@@ -253,6 +253,9 @@ public class Vehicle implements Comparable<Vehicle> {
 
     @Override
     public String toString() {
+        if (startable == null){
+            return modelName;
+        }
         return startable.toString() + "," + type + "," + modelName + "," + registrationNumber + "," + weight + "," + manufactureYear
                 + "," + mileage + "," + color + "," + tankVolume + "," + String.format("%.3f", getCalcTaxPerMonth());
     }
