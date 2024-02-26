@@ -16,23 +16,14 @@ import java.util.List;
 public class FileActions {
     private static final String FORMATTED_PATH_TO_CSV = "csv/%s.csv";
 
-    private FileActions() {
-    }
+    private FileActions() {}
 
     public static List<VehicleType> getVehicleTypesFromFile(String inFile) throws IOException {
-        List<VehicleType> resultList = new ArrayList<>();
-        Path path = getPathFromFilename(inFile);
-        List<String> linesFromFile = Files.readAllLines(path);
-        processLinesFromVehicleTypesCsv(resultList, linesFromFile);
-        return resultList;
+        return (List<VehicleType>) getListOfEntitiesFromFile("vehicleTypes", inFile);
     }
 
     public static List<Rent> getRentsFromFile(String inFile) throws IOException {
-        List<Rent> resultList = new ArrayList<>();
-        Path path = getPathFromFilename(inFile);
-        List<String> linesFromFile = Files.readAllLines(path);
-        processLinesFromRentsCsv(resultList, linesFromFile);
-        return resultList;
+        return (List<Rent>) getListOfEntitiesFromFile("rents", inFile);
     }
 
     public static List<Vehicle> getVehiclesFromFile(String inFile, List<VehicleType> vehicleTypes, List<Rent> rents) throws IOException {
@@ -44,13 +35,7 @@ public class FileActions {
     }
 
     public static VehicleType createTypeFromCsv(String csvString) {
-        List<VehicleType> resultList = new ArrayList<>();
-        processLinesFromVehicleTypesCsv(resultList, List.of(csvString));
-        if (resultList.size() != 0) {
-            return resultList.get(0);
-        }
-
-        throw new IllegalArgumentException("Invalid line from csv: " + csvString);
+        return getEntityFromCsv(new VehicleType(), csvString);
     }
 
     public static Vehicle createVehicleFromCsv(String csvString, List<VehicleType> vehicleTypes, List<Rent> rents) {
@@ -64,13 +49,7 @@ public class FileActions {
     }
 
     public static Rent createRentFromCsv(String csvString) {
-        List<Rent> resultList = new ArrayList<>();
-        processLinesFromRentsCsv(resultList, List.of(csvString));
-        if (resultList.size() != 0) {
-            return resultList.get(0);
-        }
-
-        throw new IllegalArgumentException("Invalid line from csv: " + csvString);
+        return getEntityFromCsv(new Rent(), csvString);
     }
 
     public static void setRentsListToVehicle(Vehicle vehicle, List<Rent> rents) {
@@ -82,6 +61,39 @@ public class FileActions {
             }
         }
         vehicle.setMachineOrders(vehicleOrders);
+    }
+
+    private static <T> T getEntityFromCsv(T t, String csvString) {
+        List<T> resultList = new ArrayList<>();
+        if (t instanceof VehicleType){
+            processLinesFromVehicleTypesCsv((List<VehicleType>) resultList, List.of(csvString));
+        }
+        if (t instanceof Rent){
+            processLinesFromRentsCsv((List<Rent>) resultList, List.of(csvString));
+        }
+
+        if (resultList.size() != 0) {
+            return resultList.get(0);
+        }
+
+        throw new IllegalArgumentException("Invalid line from csv: " + csvString);
+    }
+
+    private static List<?> getListOfEntitiesFromFile(String choice, String inFile) throws IOException {
+        Path path = getPathFromFilename(inFile);
+        List<String> linesFromFile = Files.readAllLines(path);
+        if (choice.equals("vehicleTypes")) {
+            List<VehicleType> resultList = new ArrayList<>();
+            processLinesFromVehicleTypesCsv(resultList, linesFromFile);
+            return resultList;
+        }
+        if (choice.equals("rents")) {
+            List<Rent> resultList = new ArrayList<>();
+            processLinesFromRentsCsv(resultList, linesFromFile);
+            return resultList;
+        }
+
+        throw new IllegalArgumentException("Invalid file choice: " + choice);
     }
 
     private static void processLinesFromVehiclesCsv(List<Vehicle> resultList, List<String> linesFromFile,
