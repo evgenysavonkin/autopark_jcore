@@ -56,7 +56,6 @@ public class Vehicle implements Comparable<Vehicle> {
         this.modelName = modelName;
     }
 
-
     public double getTotalIncome() {
         return machineOrders.stream().mapToDouble(Rent::getRentCost).sum();
     }
