@@ -1,24 +1,78 @@
 package org.evgenysav;
 
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import org.evgenysav.exceptions.DefectedVehicleException;
+import org.evgenysav.exceptions.NotVehicleException;
+
+import java.util.*;
 import java.util.stream.Stream;
 
 public class Main {
+    private static final MechanicService mechanicService = new MechanicService();
+
     public static void main(String[] args) throws NotVehicleException {
-        VehicleCollection vehicleCollection = new VehicleCollection("types", "vehicles", "rents");
-        vehicleCollection.display();
-        Vehicle vehicle = new Vehicle(8, 3, new DieselEngine(1.6, 7.2, 55),
-                new VehicleType("Car", 1.1), "Golf 137", "8682 AX-7",
-                1200, 2006, 230451, Color.GRAY, new Random().nextInt(100));
-        vehicleCollection.insert(6, vehicle);
-        vehicleCollection.delete(1);
-        vehicleCollection.delete(4);
-        vehicleCollection.display();
-        vehicleCollection.sort(new VehicleComparator());
-        vehicleCollection.display();
+        VehicleCollection vehicleCollection = new VehicleCollection("types",
+                "vehicles", "rents");
+        List<Vehicle> vehicles = vehicleCollection.getVehicles();
+        printVehicleWithMaxBreakDowns(vehicles);
+        vehicleCollection.getVehicles().forEach(mechanicService::repair);
+        for (Vehicle v : vehicles) {
+            try {
+                rentVehicle(v);
+            } catch (DefectedVehicleException e) {
+                System.err.println(e.getMessage());
+            }
+
+            System.out.println("Vehicle with id = " + v.getVehicleId() + " with model name \"" + v.getModelName() + "\" is rented now");
+        }
+    }
+
+    private static void printVehicleWithMaxBreakDowns(List<Vehicle> vehicles) {
+        List<Map<String, Integer>> list = new ArrayList<>();
+        for (Vehicle v : vehicles) {
+            list.add(new LinkedHashMap<>(mechanicService.detectBreaking(v)));
+        }
+        int maxNumberOfBreaking = 0;
+        Set<Map.Entry<String, Integer>> entrySetFromMaxBreakingCar = null;
+        for (Map<String, Integer> map : list) {
+            int sum = 0;
+            for (var entry : map.entrySet()) {
+                sum += entry.getValue();
+            }
+            if (sum > maxNumberOfBreaking) {
+                maxNumberOfBreaking = sum;
+                entrySetFromMaxBreakingCar = map.entrySet();
+            }
+
+        }
+
+        StringBuilder stringBuilder = new StringBuilder();
+        if (entrySetFromMaxBreakingCar != null) {
+            int counter = 0;
+            for (var entry : entrySetFromMaxBreakingCar) {
+                if (counter == entrySetFromMaxBreakingCar.size() - 1) {
+                    stringBuilder.append(entry.getKey()).append(",").append(entry.getValue());
+                    break;
+                }
+                stringBuilder.append(entry.getKey()).append(",").append(entry.getValue()).append(",");
+                counter++;
+            }
+        }
+
+        int vehicleIdWithMaxBreaking = mechanicService.findVehicleIdByStringFromFile(stringBuilder.toString());
+        for (Vehicle v : vehicles) {
+            if (v.getVehicleId() == vehicleIdWithMaxBreaking) {
+                System.out.println("A car with most breakdowns numbers is " + v);
+            }
+        }
+    }
+
+    private static boolean rentVehicle(Vehicle vehicle) {
+        if (mechanicService.isBroken(vehicle)) {
+            throw new DefectedVehicleException("Vehicle with id = " + vehicle.getVehicleId() + " is defected");
+        }
+
+        vehicle.setRented(true);
+        return true;
     }
 
     private static class Helper {
