@@ -15,6 +15,7 @@ public class MechanicService implements Fixer {
     private static final String FILENAME_PATH = "csv/" + FILENAME + ".csv";
     private static final Random random = new Random();
     private static final StringBuilder stringBuilder = new StringBuilder();
+    private static List<String> linesFromOrdersFile = new ArrayList<>();
 
     @Override
     public Map<String, Integer> detectBreaking(Vehicle vehicle) {
@@ -23,7 +24,7 @@ public class MechanicService implements Fixer {
             return Collections.emptyMap();
         }
 
-        Map<String, Integer> map = new HashMap<>();
+        Map<String, Integer> mapOfBreakDowns = new HashMap<>();
         Set<Integer> takenIndexes = new HashSet<>();
         while (numberOfDetails != 0) {
             int randomKey = random.nextInt(DETAILS.length);
@@ -34,25 +35,24 @@ public class MechanicService implements Fixer {
             }
 
             takenIndexes.add(randomKey);
-            map.put(DETAILS[randomKey], random.nextInt(10) + 1);
+            mapOfBreakDowns.put(DETAILS[randomKey], random.nextInt(10) + 1);
             numberOfDetails--;
         }
 
-        printMapToFIle(vehicle, map);
-        return map;
+        printMapToFIle(vehicle, mapOfBreakDowns);
+        return mapOfBreakDowns;
     }
 
     @Override
     public void repair(Vehicle vehicle) {
         int vehicleId = vehicle.getVehicleId();
-        List<String> linesFromFile = null;
         try {
-            linesFromFile = FileActions.getLinesFromFile(FILENAME);
+            linesFromOrdersFile = FileActions.getLinesFromFile(FILENAME);
         } catch (IOException e) {
             throw new RuntimeException(e.getMessage(), e);
         }
 
-        Iterator<String> iterator = linesFromFile.iterator();
+        Iterator<String> iterator = linesFromOrdersFile.iterator();
         while (iterator.hasNext()) {
             String line = iterator.next();
             String[] strings = getStringsFromLine(line);
@@ -62,7 +62,7 @@ public class MechanicService implements Fixer {
         }
 
         try (FileWriter fileWriter = new FileWriter(FILENAME_PATH)) {
-            for (String s : linesFromFile) {
+            for (String s : linesFromOrdersFile) {
                 fileWriter.write(s + "\n");
             }
         } catch (IOException e) {
@@ -72,15 +72,14 @@ public class MechanicService implements Fixer {
 
     @Override
     public int findVehicleIdByStringFromFile(String line) {
-        List<String> linesFromFile = null;
         try {
-            linesFromFile = FileActions.getLinesFromFile("orders");
+            linesFromOrdersFile = FileActions.getLinesFromFile("orders");
         } catch (IOException e) {
             throw new RuntimeException(e.getMessage());
         }
 
-        if (linesFromFile != null) {
-            for (String s : linesFromFile) {
+        if (linesFromOrdersFile != null) {
+            for (String s : linesFromOrdersFile) {
                 if (s.contains(line)) {
                     String[] strings = getStringsFromLine(s);
                     return Integer.parseInt(strings[0]);
@@ -93,14 +92,13 @@ public class MechanicService implements Fixer {
 
     @Override
     public boolean isBroken(Vehicle vehicle) {
-        List<String> linesFromFile;
         try {
-            linesFromFile = FileActions.getLinesFromFile(FILENAME);
+            linesFromOrdersFile = FileActions.getLinesFromFile(FILENAME);
         } catch (IOException e) {
             throw new RuntimeException(e.getMessage(), e);
         }
-        if (linesFromFile != null) {
-            for (String line : linesFromFile) {
+        if (linesFromOrdersFile != null) {
+            for (String line : linesFromOrdersFile) {
                 String[] strings = getStringsFromLine(line);
                 String vehicleId = String.valueOf(vehicle.getVehicleId());
                 if (strings[0].equals(vehicleId)) {
