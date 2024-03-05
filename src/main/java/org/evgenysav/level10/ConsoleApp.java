@@ -3,8 +3,8 @@ package org.evgenysav.level10;
 import org.evgenysav.MechanicService;
 import org.evgenysav.Vehicle;
 import org.evgenysav.VehicleCollection;
-import org.evgenysav.level7.CarWashingQueue;
-import org.evgenysav.level8.Stack;
+import org.evgenysav.custom_collections.CarWashingQueue;
+import org.evgenysav.custom_collections.Stack;
 
 import java.util.Comparator;
 import java.util.List;

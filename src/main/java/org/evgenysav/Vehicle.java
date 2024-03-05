@@ -56,11 +56,6 @@ public class Vehicle implements Comparable<Vehicle> {
         setTankVolume(tankVolume);
     }
 
-    //for debug only
-    public Vehicle(int vehicleId) {
-        this.vehicleId = vehicleId;
-    }
-
     public Vehicle(String modelName) {
         this.modelName = modelName;
     }
@@ -265,19 +260,17 @@ public class Vehicle implements Comparable<Vehicle> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Vehicle vehicle = (Vehicle) o;
-        return vehicleId == vehicle.vehicleId && vehicleTypeId == vehicle.vehicleTypeId &&
-                weight == vehicle.weight && manufactureYear == vehicle.manufactureYear &&
-                mileage == vehicle.mileage && tankVolume == vehicle.tankVolume &&
-                isRented == vehicle.isRented && Objects.equals(machineOrders,
-                vehicle.machineOrders) && Objects.equals(startable, vehicle.startable) &&
-                Objects.equals(type, vehicle.type) && Objects.equals(modelName, vehicle.modelName) &&
-                Objects.equals(registrationNumber, vehicle.registrationNumber) && color == vehicle.color;
+        return vehicleId == vehicle.vehicleId && vehicleTypeId == vehicle.vehicleTypeId
+                && weight == vehicle.weight && manufactureYear == vehicle.manufactureYear
+                && mileage == vehicle.mileage && Objects.equals(machineOrders, vehicle.machineOrders)
+                && Objects.equals(startable, vehicle.startable) && Objects.equals(type, vehicle.type)
+                && Objects.equals(modelName, vehicle.modelName)
+                && Objects.equals(registrationNumber, vehicle.registrationNumber) && color == vehicle.color;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(vehicleId, vehicleTypeId, machineOrders, startable, type, modelName, registrationNumber,
-                weight, manufactureYear, mileage, color, tankVolume, isRented);
+        return Objects.hash(vehicleId, vehicleTypeId, machineOrders, startable, type, modelName, registrationNumber, weight, manufactureYear, mileage, color);
     }
 
     @Override

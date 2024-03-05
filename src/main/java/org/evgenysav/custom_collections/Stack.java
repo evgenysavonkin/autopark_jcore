@@ -1,4 +1,4 @@
-package org.evgenysav.level8;
+package org.evgenysav.custom_collections;
 
 public class Stack<T> {
     private T[] elements;

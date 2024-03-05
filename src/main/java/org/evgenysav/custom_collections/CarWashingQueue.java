@@ -1,4 +1,4 @@
-package org.evgenysav.level7;
+package org.evgenysav.custom_collections;
 
 public class CarWashingQueue<T> {
     private T[] elements;
