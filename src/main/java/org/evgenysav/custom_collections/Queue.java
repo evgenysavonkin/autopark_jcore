@@ -1,15 +1,15 @@
 package org.evgenysav.custom_collections;
 
-public class CarWashingQueue<T> {
+public class Queue<T> {
     private T[] elements;
     private int size;
 
-    public CarWashingQueue(int size) {
+    public Queue(int size) {
         elements = (T[]) new Object[size];
 
     }
 
-    public CarWashingQueue() {
+    public Queue() {
         elements = (T[]) new Object[10];
     }
 

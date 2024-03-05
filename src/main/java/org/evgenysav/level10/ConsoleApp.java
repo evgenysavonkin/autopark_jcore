@@ -3,7 +3,7 @@ package org.evgenysav.level10;
 import org.evgenysav.MechanicService;
 import org.evgenysav.Vehicle;
 import org.evgenysav.VehicleCollection;
-import org.evgenysav.custom_collections.CarWashingQueue;
+import org.evgenysav.custom_collections.Queue;
 import org.evgenysav.custom_collections.Stack;
 
 import java.util.Comparator;
@@ -25,8 +25,10 @@ public class ConsoleApp {
         System.out.println(volkswagenVehicles.stream()
                 .max(Comparator.comparing(Vehicle::getManufactureYear))
                 .orElse(new Vehicle()));
+
         task7WithStreams();
         task8WithStreams();
+
         getBrokenVehicles(vehicles)
                 .forEach(e -> {
                     if (e.getDefectCount() == 0) {
@@ -39,7 +41,7 @@ public class ConsoleApp {
     }
 
     private static void task7WithStreams() {
-        CarWashingQueue<Vehicle> queue = new CarWashingQueue<>();
+        Queue<Vehicle> queue = new Queue<>();
         IntStream.range(1, 6)
                 .forEach(i -> {
                     queue.enqueue(new Vehicle("Auto" + i));
