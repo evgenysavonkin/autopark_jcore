@@ -21,6 +21,7 @@ public class Vehicle implements Comparable<Vehicle> {
     private Color color;
     private int tankVolume;
     private boolean isRented;
+    private long defectCount;
 
     public Vehicle() {
     }
@@ -249,6 +250,14 @@ public class Vehicle implements Comparable<Vehicle> {
 
     public void setRented(boolean rented) {
         isRented = rented;
+    }
+
+    public long getDefectCount() {
+        return defectCount;
+    }
+
+    public void setDefectCount(long defectCount) {
+        this.defectCount = defectCount;
     }
 
     @Override
