@@ -5,7 +5,6 @@ import org.evgenysav.exceptions.NotVehicleException;
 public class TechnicalSpecialist {
 
     private TechnicalSpecialist() {
-
     }
 
     private static final int LOWER_LIMIT_MANUFACTURE_YEAR = 1886;
@@ -143,6 +142,4 @@ public class TechnicalSpecialist {
 
         return true;
     }
-
-
 }

@@ -1,8 +1,8 @@
 package org.evgenysav;
 
 import org.evgenysav.util.FileActions;
+import org.evgenysav.util.VehicleCollectionLoader;
 
-import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
 
@@ -13,45 +13,9 @@ public class VehicleCollection {
     private static final String DISPLAY_FORMAT = "%-6d %-9s %-25s %-15s %-15d %-8d %-10d %-11s %-13.3f %-13.3f %-13.3f";
 
     public VehicleCollection(String vehicleTypesFileName, String vehiclesFileName, String rentsFileName) {
-        vehicleTypes = loadTypes(vehicleTypesFileName);
-        rents = loadRents(rentsFileName);
-        vehicles = loadVehicles(vehiclesFileName);
-    }
-
-    private List<VehicleType> loadTypes(String inFile) {
-        try {
-            return FileActions.getVehicleTypesFromFile(inFile);
-        } catch (IOException e) {
-            throw new IllegalArgumentException(e.getMessage(), e);
-        }
-    }
-
-    private List<Rent> loadRents(String inFile) {
-        try {
-            return FileActions.getRentsFromFile(inFile);
-        } catch (IOException e) {
-            throw new IllegalArgumentException(e.getMessage(), e);
-        }
-    }
-
-    private List<Vehicle> loadVehicles(String inFile) {
-        try {
-            return FileActions.getVehiclesFromFile(inFile, vehicleTypes, rents);
-        } catch (IOException e) {
-            throw new IllegalArgumentException(e.getMessage(), e);
-        }
-    }
-
-    public VehicleType createType(String csvString) {
-        return FileActions.createTypeFromCsv(csvString);
-    }
-
-    public Vehicle createVehicle(String csvString) {
-        return FileActions.createVehicleFromCsv(csvString, vehicleTypes, rents);
-    }
-
-    public Rent createRent(String csvString) {
-        return FileActions.createRentFromCsv(csvString);
+        vehicleTypes = VehicleCollectionLoader.loadTypes(vehicleTypesFileName);
+        rents = VehicleCollectionLoader.loadRents(rentsFileName);
+        vehicles = VehicleCollectionLoader.loadVehicles(vehiclesFileName, vehicleTypes, rents);
     }
 
     public void insert(int index, Vehicle v) {
@@ -79,7 +43,9 @@ public class VehicleCollection {
     }
 
     public double sumTotalProfit() {
-        return vehicles.stream().mapToDouble(Vehicle::getTotalProfit).sum();
+        return vehicles.stream()
+                .mapToDouble(Vehicle::getTotalProfit)
+                .sum();
     }
 
     public void display() {
