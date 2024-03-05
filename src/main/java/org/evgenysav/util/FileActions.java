@@ -1,11 +1,9 @@
 package org.evgenysav.util;
 
 import org.evgenysav.*;
+import org.evgenysav.exceptions.NotVehicleException;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -14,9 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FileActions {
-    private static final String FORMATTED_PATH_TO_CSV = "csv/%s.csv";
-
-    private FileActions() {}
+    private FileActions() {
+    }
 
     public static List<VehicleType> getVehicleTypesFromFile(String inFile) throws IOException {
         return getListOfEntitiesFromFile(new VehicleType(), inFile);
@@ -52,6 +49,16 @@ public class FileActions {
         }
 
         vehicle.setMachineOrders(vehicleOrders);
+    }
+
+    public static List<String> getLinesFromFile(String filename) throws IOException {
+        Path path = getPathFromFilename(filename);
+        return Files.readAllLines(path);
+    }
+
+    public static Path getPathFromFilename(String filename) {
+        Path currDirectory = Paths.get(System.getProperty("user.dir"));
+        return currDirectory.resolve("csv").resolve(filename + ".csv");
     }
 
     private static <T> T getEntityFromCsv(T t, Object... values) {
@@ -309,18 +316,5 @@ public class FileActions {
         int rightQuotePos = strings[1].indexOf("\"");
         return Double.parseDouble(strings[0].substring(leftQuotePos + 1) + "." +
                 strings[1].substring(0, rightQuotePos));
-    }
-
-    private static Path getPathFromFilename(String filename) {
-        ClassLoader classLoader = FileActions.class.getClassLoader();
-        URL resource = classLoader.getResource(String.format(FORMATTED_PATH_TO_CSV, filename));
-        if (resource == null) {
-            throw new IllegalArgumentException("Cannot find file with name \"" + filename + "\"", new FileNotFoundException());
-        }
-        try {
-            return Paths.get(resource.toURI());
-        } catch (URISyntaxException e) {
-            throw new IllegalArgumentException("Invalid filename: " + filename, e);
-        }
     }
 }

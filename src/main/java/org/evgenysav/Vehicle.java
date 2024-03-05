@@ -1,5 +1,7 @@
 package org.evgenysav;
 
+import org.evgenysav.exceptions.NotVehicleException;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -18,6 +20,8 @@ public class Vehicle implements Comparable<Vehicle> {
     private int mileage;
     private Color color;
     private int tankVolume;
+    private boolean isRented;
+    private long defectCount;
 
     public Vehicle() {
     }
@@ -52,7 +56,12 @@ public class Vehicle implements Comparable<Vehicle> {
         setTankVolume(tankVolume);
     }
 
-    public Vehicle(String modelName){
+    //for debug only
+    public Vehicle(int vehicleId) {
+        this.vehicleId = vehicleId;
+    }
+
+    public Vehicle(String modelName) {
         this.modelName = modelName;
     }
 
@@ -235,28 +244,49 @@ public class Vehicle implements Comparable<Vehicle> {
         this.vehicleTypeId = vehicleTypeId;
     }
 
+    public boolean isRented() {
+        return isRented;
+    }
+
+    public void setRented(boolean rented) {
+        isRented = rented;
+    }
+
+    public long getDefectCount() {
+        return defectCount;
+    }
+
+    public void setDefectCount(long defectCount) {
+        this.defectCount = defectCount;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Vehicle vehicle = (Vehicle) o;
-        return weight == vehicle.weight && manufactureYear == vehicle.manufactureYear && mileage == vehicle.mileage &&
-                tankVolume == vehicle.tankVolume && Objects.equals(startable, vehicle.startable) && type == vehicle.type &&
-                Objects.equals(modelName, vehicle.modelName) && Objects.equals(registrationNumber, vehicle.registrationNumber) &&
-                color == vehicle.color;
+        return vehicleId == vehicle.vehicleId && vehicleTypeId == vehicle.vehicleTypeId &&
+                weight == vehicle.weight && manufactureYear == vehicle.manufactureYear &&
+                mileage == vehicle.mileage && tankVolume == vehicle.tankVolume &&
+                isRented == vehicle.isRented && Objects.equals(machineOrders,
+                vehicle.machineOrders) && Objects.equals(startable, vehicle.startable) &&
+                Objects.equals(type, vehicle.type) && Objects.equals(modelName, vehicle.modelName) &&
+                Objects.equals(registrationNumber, vehicle.registrationNumber) && color == vehicle.color;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(startable, type, modelName, registrationNumber, weight, manufactureYear, mileage, color, tankVolume);
+        return Objects.hash(vehicleId, vehicleTypeId, machineOrders, startable, type, modelName, registrationNumber,
+                weight, manufactureYear, mileage, color, tankVolume, isRented);
     }
 
     @Override
     public String toString() {
-        if (startable == null){
+        if (startable == null) {
             return modelName;
         }
-        return startable.toString() + "," + type + "," + modelName + "," + registrationNumber + "," + weight + "," + manufactureYear
+
+        return startable + "," + type + "," + modelName + "," + registrationNumber + "," + weight + "," + manufactureYear
                 + "," + mileage + "," + color + "," + tankVolume + "," + String.format("%.3f", getCalcTaxPerMonth());
     }
 }

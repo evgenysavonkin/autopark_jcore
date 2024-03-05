@@ -106,4 +106,16 @@ public class VehicleCollection {
         colorStr = colorStr.substring(1).toLowerCase();
         return firstLetter + colorStr;
     }
+
+    public List<VehicleType> getVehicleTypes() {
+        return vehicleTypes;
+    }
+
+    public List<Vehicle> getVehicles() {
+        return vehicles;
+    }
+
+    public List<Rent> getRents() {
+        return rents;
+    }
 }

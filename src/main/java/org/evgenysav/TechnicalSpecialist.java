@@ -1,5 +1,7 @@
 package org.evgenysav;
 
+import org.evgenysav.exceptions.NotVehicleException;
+
 public class TechnicalSpecialist {
 
     private TechnicalSpecialist() {
