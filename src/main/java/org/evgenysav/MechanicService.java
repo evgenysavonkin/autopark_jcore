@@ -39,6 +39,11 @@ public class MechanicService implements Fixer {
             numberOfDetails--;
         }
 
+        long defectCount = mapOfBreakDowns.values().stream()
+                .mapToInt(e -> e.intValue())
+                .sum();
+        vehicle.setDefectCount(defectCount);
+
         printMapToFIle(vehicle, mapOfBreakDowns);
         return mapOfBreakDowns;
     }

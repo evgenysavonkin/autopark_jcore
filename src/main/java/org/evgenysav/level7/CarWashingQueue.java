@@ -1,7 +1,5 @@
 package org.evgenysav.level7;
 
-import org.evgenysav.Vehicle;
-
 public class CarWashingQueue<T> {
     private T[] elements;
     private int size;
@@ -13,7 +11,6 @@ public class CarWashingQueue<T> {
 
     public CarWashingQueue() {
         elements = (T[]) new Object[10];
-//        elements = new Vehicle[10];
     }
 
     public void enqueue(T t) {
@@ -51,12 +48,11 @@ public class CarWashingQueue<T> {
         return size;
     }
 
-    public void printVehicles() {
+    public void printElements() {
         System.out.println();
         for (T t : elements) {
             if (t != null) {
                 System.out.println(t);
-//                System.out.println(v.getModelName());
             }
         }
     }
