@@ -66,6 +66,8 @@ public class MechanicService implements Fixer {
             }
         }
 
+        System.out.println(vehicle.getModelName() + " was repaired");
+
         try (FileWriter fileWriter = new FileWriter(FILENAME_PATH)) {
             for (String s : linesFromOrdersFile) {
                 fileWriter.write(s + "\n");

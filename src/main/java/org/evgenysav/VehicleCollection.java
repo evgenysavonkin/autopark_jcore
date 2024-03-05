@@ -48,7 +48,34 @@ public class VehicleCollection {
                 .sum();
     }
 
+    public double sumTotalProfit(List<Vehicle> vehicles) {
+        return vehicles
+                .stream()
+                .mapToDouble(Vehicle::getTotalProfit)
+                .sum();
+    }
+
     public void display() {
+        displayVehicles(vehicles, false);
+    }
+
+    public void display(List<Vehicle> vehicles) {
+        displayVehicles(vehicles, true);
+    }
+
+    public void sort(Comparator<Vehicle> comparator) {
+        vehicles.sort(comparator);
+    }
+
+    public Vehicle getVehicleById(int id) {
+        return vehicles
+                .stream()
+                .filter(v -> v.getVehicleId() == id)
+                .findFirst()
+                .orElseThrow(IllegalArgumentException::new);
+    }
+
+    private void displayVehicles(List<Vehicle> vehicles, boolean customCollection) {
         System.out.println("Id     Type      ModelName                 Number          Weight (kg)     Year     Mileage    Color       Income        Tax           Profit");
         for (Vehicle v : vehicles) {
             System.out.printf(DISPLAY_FORMAT, v.getVehicleId(), v.getType(), v.getModelName(),
@@ -56,14 +83,15 @@ public class VehicleCollection {
                     getOrdinalColorForm(v.getColor()), v.getTotalIncome(), v.getCalcTaxPerMonth(), v.getTotalProfit());
             System.out.println();
         }
-        System.out.printf("Total                                                                                                        " +
-                "                          %.3f", sumTotalProfit());
+        if (customCollection) {
+            System.out.printf("Total                                                                                                        " +
+                    "                          %.3f", sumTotalProfit(vehicles));
+        } else {
+            System.out.printf("Total                                                                                                        " +
+                    "                          %.3f", sumTotalProfit(this.vehicles));
+        }
         System.out.println();
         System.out.println();
-    }
-
-    public void sort(Comparator<Vehicle> comparator) {
-        vehicles.sort(comparator);
     }
 
     private String getOrdinalColorForm(Color color) {
