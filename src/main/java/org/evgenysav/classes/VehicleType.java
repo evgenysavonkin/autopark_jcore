@@ -1,4 +1,4 @@
-package org.evgenysav;
+package org.evgenysav.classes;
 
 public class VehicleType {
     private int id;

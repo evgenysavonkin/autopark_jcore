@@ -1,4 +1,4 @@
-package org.evgenysav;
+package org.evgenysav.classes;
 
 import org.evgenysav.exceptions.DefectedVehicleException;
 import org.evgenysav.exceptions.NotVehicleException;

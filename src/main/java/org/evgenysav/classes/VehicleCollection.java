@@ -1,4 +1,4 @@
-package org.evgenysav;
+package org.evgenysav.classes;
 
 import org.evgenysav.util.FileActions;
 import org.evgenysav.util.VehicleCollectionLoader;

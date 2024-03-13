@@ -1,11 +1,11 @@
-package org.evgenysav;
+package org.evgenysav.classes;
 
 import org.evgenysav.exceptions.NotVehicleException;
 
 import java.util.List;
 import java.util.Objects;
 
-import static org.evgenysav.TechnicalSpecialist.*;
+import static org.evgenysav.classes.TechnicalSpecialist.*;
 
 public class Vehicle implements Comparable<Vehicle> {
     private int vehicleId;

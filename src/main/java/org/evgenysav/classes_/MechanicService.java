@@ -1,21 +1,25 @@
-package org.evgenysav;
+package org.evgenysav.classes_;
 
+import org.evgenysav.classes.Fixer;
+import org.evgenysav.classes.Vehicle;
+import org.evgenysav.infrastructure.core.annotations.Autowired;
 import org.evgenysav.util.FileActions;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.StandardOpenOption;
 import java.util.*;
 
 public class MechanicService implements Fixer {
 
+    private final Random random = new Random();
     private static final String[] DETAILS = new String[]{"Фильтр", "Фланец", "Втулка", "Вал", "Ось", "Свеча", "Масло", "ГРМ", "ШРУС"};
+    private static List<String> linesFromOrdersFile = new ArrayList<>();
     private static final String FILENAME = "orders";
     private static final String FILENAME_PATH = "csv/" + FILENAME + ".csv";
-    private static final Random random = new Random();
     private static final StringBuilder stringBuilder = new StringBuilder();
-    private static List<String> linesFromOrdersFile = new ArrayList<>();
+    @Autowired
+    private ParserBreakingFromFile parser;
+
 
     @Override
     public Map<String, Integer> detectBreaking(Vehicle vehicle) {
@@ -44,7 +48,7 @@ public class MechanicService implements Fixer {
                 .sum();
         vehicle.setDefectCount(defectCount);
 
-        printMapToFIle(vehicle, mapOfBreakDowns);
+        parser.printMapToFIle(vehicle, mapOfBreakDowns);
         return mapOfBreakDowns;
     }
 
@@ -60,13 +64,14 @@ public class MechanicService implements Fixer {
         Iterator<String> iterator = linesFromOrdersFile.iterator();
         while (iterator.hasNext()) {
             String line = iterator.next();
-            String[] strings = getStringsFromLine(line);
+            String[] strings = parser.getStringsFromLine(line);
             if (strings[0].equals(String.valueOf(vehicleId))) {
                 iterator.remove();
             }
         }
 
         System.out.println(vehicle.getModelName() + " was repaired");
+
 
         try (FileWriter fileWriter = new FileWriter(FILENAME_PATH)) {
             for (String s : linesFromOrdersFile) {
@@ -88,7 +93,7 @@ public class MechanicService implements Fixer {
         if (linesFromOrdersFile != null) {
             for (String s : linesFromOrdersFile) {
                 if (s.contains(line)) {
-                    String[] strings = getStringsFromLine(s);
+                    String[] strings = parser.getStringsFromLine(s);
                     return Integer.parseInt(strings[0]);
                 }
             }
@@ -104,9 +109,10 @@ public class MechanicService implements Fixer {
         } catch (IOException e) {
             throw new RuntimeException(e.getMessage(), e);
         }
+
         if (linesFromOrdersFile != null) {
             for (String line : linesFromOrdersFile) {
-                String[] strings = getStringsFromLine(line);
+                String[] strings = parser.getStringsFromLine(line);
                 String vehicleId = String.valueOf(vehicle.getVehicleId());
                 if (strings[0].equals(vehicleId)) {
                     return true;
@@ -115,28 +121,5 @@ public class MechanicService implements Fixer {
         }
 
         return false;
-    }
-
-    private void printMapToFIle(Vehicle vehicle, Map<String, Integer> map) {
-        stringBuilder.setLength(0);
-        stringBuilder.append(vehicle.getVehicleId());
-        for (var entry : map.entrySet()) {
-            stringBuilder.append(",").append(entry.getKey()).append(",").append(entry.getValue());
-        }
-        stringBuilder.append("\n");
-
-        try {
-            Files.write(FileActions.getPathFromFilename("orders"), stringBuilder.toString().getBytes(), StandardOpenOption.APPEND);
-        } catch (IOException e) {
-            throw new IllegalArgumentException(e);
-        }
-    }
-
-    private String[] getStringsFromLine(String line) {
-        if (line != null) {
-            return line.split(",");
-        }
-
-        throw new RuntimeException("Empty line from file");
     }
 }

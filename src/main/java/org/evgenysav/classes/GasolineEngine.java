@@ -1,4 +1,4 @@
-package org.evgenysav;
+package org.evgenysav.classes;
 
 public class GasolineEngine extends CombustionEngine {
     public GasolineEngine(double engineCapacity, double fuelTankCapacity, double fuelConsumptionPer100) {

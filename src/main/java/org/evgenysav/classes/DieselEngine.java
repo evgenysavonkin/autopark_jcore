@@ -1,4 +1,4 @@
-package org.evgenysav;
+package org.evgenysav.classes;
 
 public class DieselEngine extends CombustionEngine{
     public DieselEngine(double engineCapacity, double fuelTankCapacity, double fuelConsumptionPer100) {

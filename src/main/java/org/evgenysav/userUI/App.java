@@ -1,6 +1,6 @@
 package org.evgenysav.userUI;
 
-import org.evgenysav.*;
+import org.evgenysav.classes.*;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -113,7 +113,16 @@ public class App {
                     System.err.println("Incorrect input!");
                     return;
                 }
-                Vehicle vehicle = vehicleCollection.getVehicleById(vehicleId);
+
+                Vehicle vehicle;
+                try {
+                    vehicle = vehicleCollection.getVehicleById(vehicleId);
+                } catch (IllegalArgumentException e){
+                    System.out.println();
+                    System.err.println("Incorrect vehicle id!");
+                    return;
+                }
+
                 printVehicleInfo(vehicle);
             }
             case "6" -> {
@@ -127,14 +136,14 @@ public class App {
             }
             case "7" -> {
                 List<Vehicle> vehicles = vehicleCollection.getVehicles();
-                vehicles.forEach(mechanicService::detectBreaking);
+//                vehicles.forEach(mechanicService::detectBreaking);
 
                 vehicles.stream()
-                        .filter(mechanicService::isBroken)
+//                        .filter(mechanicService::isBroken)
                         .forEach(v -> System.out.println(v.getModelName() + " was broken"));
 
                 System.out.println();
-                vehicles.forEach(mechanicService::repair);
+//                vehicles.forEach(mechanicService::repair);
             }
             case "8" -> {
                 System.out.println("\nPeriod between each auto diagnostics is one month");
@@ -201,6 +210,7 @@ public class App {
             boolean noDuplicates = grouped.values().stream().allMatch(group -> group.size() == 1);
 
             if (noDuplicates) {
+                System.out.println();
                 System.out.println("Duplicates are not found!");
                 return;
             }

@@ -1,8 +1,8 @@
 package org.evgenysav.level10;
 
-import org.evgenysav.MechanicService;
-import org.evgenysav.Vehicle;
-import org.evgenysav.VehicleCollection;
+import org.evgenysav.classes.MechanicService;
+import org.evgenysav.classes.Vehicle;
+import org.evgenysav.classes.VehicleCollection;
 import org.evgenysav.custom_collections.Queue;
 import org.evgenysav.custom_collections.Stack;
 
@@ -36,7 +36,7 @@ public class ConsoleApp {
                     } else {
                         System.out.println("Defected details count for auto \"" + e.getModelName() + "\" is " + e.getDefectCount());
                     }
-                    mechanicService.repair(e);
+//                    mechanicService.repair(e);
                 });
     }
 
@@ -65,7 +65,7 @@ public class ConsoleApp {
 
     private static List<Vehicle> getBrokenVehicles(List<Vehicle> vehicles) {
         return vehicles.stream()
-                .filter(x -> !mechanicService.detectBreaking(x).isEmpty())
+//                .filter(x -> !mechanicService.detectBreaking(x).isEmpty())
                 .toList();
     }
 

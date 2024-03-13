@@ -1,6 +1,6 @@
 package org.evgenysav.util;
 
-import org.evgenysav.*;
+import org.evgenysav.classes.*;
 import org.evgenysav.exceptions.NotVehicleException;
 
 import java.io.IOException;

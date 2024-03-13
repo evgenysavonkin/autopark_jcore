@@ -1,4 +1,4 @@
-package org.evgenysav;
+package org.evgenysav.classes;
 
 public abstract class AbstractEngine implements Startable {
 
