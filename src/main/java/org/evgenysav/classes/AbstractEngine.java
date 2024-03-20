@@ -5,6 +5,10 @@ public abstract class AbstractEngine implements Startable {
     private String typeOfEngine;
     private double taxCoefficient;
 
+    public AbstractEngine() {
+
+    }
+
     public AbstractEngine(String typeOfEngine, double taxCoefficient) {
         this.typeOfEngine = typeOfEngine;
         this.taxCoefficient = taxCoefficient;

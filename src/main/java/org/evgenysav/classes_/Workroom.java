@@ -19,10 +19,10 @@ public class Workroom {
     public void checkAllVehicle(List<Vehicle> vehicles) {
         vehicles.forEach(mechanic::detectBreaking);
         List<Vehicle> notBrokenVehicles = new ArrayList<>();
-        for (Vehicle v : vehicles){
-            if (mechanic.isBroken(v)){
+        for (Vehicle v : vehicles) {
+            if (mechanic.isBroken(v)) {
                 System.out.println(v.getModelName() + " was broken");
-            } else{
+            } else {
                 notBrokenVehicles.add(v);
             }
         }

@@ -50,6 +50,7 @@ public class ObjectFactoryImpl implements ObjectFactory {
     private <T> void initialize(Class<T> implementation, T object) {
         for (Method method : implementation.getDeclaredMethods()) {
             if (method.isAnnotationPresent(InitMethod.class)){
+                method.setAccessible(true);
                 method.invoke(object);
             }
         }

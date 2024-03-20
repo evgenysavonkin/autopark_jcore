@@ -13,11 +13,6 @@ public class JavaConfig implements Config {
 
     private final Scanner scanner;
 
-    /**
-     * Key of this map represents interface
-     * <p>
-     * Value of this map represents certain implementation of each interface that is key
-     */
     private final Map<Class<?>, Class<?>> interfaceToImplementation;
 
     @SuppressWarnings("unchecked")
@@ -29,12 +24,12 @@ public class JavaConfig implements Config {
                 .findFirst();
 
         if (optional.isEmpty()) {
-            System.err.println("Target interface wasn't found. Trying to find implementation automatically");
-        } else{
+            System.out.println("Target interface " + target.getSimpleName() + " wasn't found. Trying to find implementation automatically");
+        } else {
             return (Class<? extends T>) optional.get();
         }
 
-        Set<Class<?>> subTypesOf =  scanner.getSubTypesOf((Class<Object>) target);
+        Set<Class<?>> subTypesOf = scanner.getSubTypesOf((Class<Object>) target);
 
         if (subTypesOf.isEmpty()) {
             return target;

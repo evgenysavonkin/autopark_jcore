@@ -28,7 +28,6 @@ public class ParserBreakingFromFile {
     }
 
 
-
     public String[] getStringsFromLine(String line) {
         if (line != null) {
             return line.split(",");

@@ -136,14 +136,14 @@ public class App {
             }
             case "7" -> {
                 List<Vehicle> vehicles = vehicleCollection.getVehicles();
-//                vehicles.forEach(mechanicService::detectBreaking);
+                vehicles.forEach(mechanicService::detectBreaking);
 
                 vehicles.stream()
-//                        .filter(mechanicService::isBroken)
+                        .filter(mechanicService::isBroken)
                         .forEach(v -> System.out.println(v.getModelName() + " was broken"));
 
                 System.out.println();
-//                vehicles.forEach(mechanicService::repair);
+                vehicles.forEach(mechanicService::repair);
             }
             case "8" -> {
                 System.out.println("\nPeriod between each auto diagnostics is one month");

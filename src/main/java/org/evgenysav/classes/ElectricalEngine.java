@@ -7,6 +7,10 @@ public class ElectricalEngine extends AbstractEngine {
     private double batterySize;
     private double electricityConsumption;
 
+    public ElectricalEngine() {
+
+    }
+
     public ElectricalEngine(double batterySize, double electricityConsumption) {
         super("Electrical", 0.1);
         this.batterySize = batterySize;
