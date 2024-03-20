@@ -16,7 +16,8 @@ public class VehicleType {
         this.taxCoefficient = taxCoefficient;
     }
 
-    public VehicleType(){}
+    public VehicleType() {
+    }
 
     public void display() {
         System.out.println("typeName = " + typeName);

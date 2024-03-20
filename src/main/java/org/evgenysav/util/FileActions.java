@@ -2,16 +2,23 @@ package org.evgenysav.util;
 
 import org.evgenysav.classes.*;
 import org.evgenysav.exceptions.NotVehicleException;
+import org.evgenysav.infrastructure.dto.entity.CombustionStartable;
+import org.evgenysav.infrastructure.dto.entity.ElectricalStartable;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 public class FileActions {
+
+    private static final SimpleDateFormat dateFormatFromRents = new SimpleDateFormat("dd.MM.yyyy");
+
     private FileActions() {
     }
 
@@ -59,6 +66,99 @@ public class FileActions {
     public static Path getPathFromFilename(String filename) {
         Path currDirectory = Paths.get(System.getProperty("user.dir"));
         return currDirectory.resolve("csv").resolve(filename + ".csv");
+    }
+
+    //object is engine
+    public static List<Object> getEngineListFromFile(String filename) throws IOException {
+        List<String> linesFromFile = getLinesFromFile(filename);
+        List<Object> engineList = new ArrayList<>();
+
+        for (String line : linesFromFile) {
+            String[] valuesFromLine = line.split(",");
+            long vehicleId;
+            try {
+                vehicleId = Long.parseLong(valuesFromLine[0]);
+            } catch (NumberFormatException e) {
+                throw new RuntimeException(e);
+            }
+
+            boolean containsGasolineType = line.contains("Gasoline");
+            boolean containsDieselType = line.contains("Diesel");
+            boolean lineContainsQuotes = line.contains("\"");
+            if (containsGasolineType || containsDieselType) {
+                CombustionStartable combustionStartable = new CombustionStartable();
+                if (containsGasolineType) {
+                    combustionStartable.setEngineType("Gasoline");
+                    combustionStartable.setTaxCoefficient(1.1);
+                } else {
+                    combustionStartable.setEngineType("Diesel");
+                    combustionStartable.setTaxCoefficient(1.2);
+                }
+                combustionStartable.setVehicleId(vehicleId);
+
+                double engineCapacity;
+                double fuelTankCapacity;
+                double fuelConsumptionPer100;
+                if (!lineContainsQuotes) {
+                    engineCapacity = Double.parseDouble(valuesFromLine[9]);
+                    fuelTankCapacity = Double.parseDouble(valuesFromLine[10]);
+                    fuelConsumptionPer100 = Double.parseDouble(valuesFromLine[11]);
+                } else {
+                    if (valuesFromLine.length == 13) {
+                        String[] tempValues = line.replaceFirst("\"", "!").split("!");
+                        String[] splittedAfterEngine = tempValues[1].split(",");
+                        if (splittedAfterEngine.length != 3){
+                            engineCapacity = getDoubleFromCsv(valuesFromLine[9], valuesFromLine[10]);
+                            fuelTankCapacity = Double.parseDouble(valuesFromLine[11]);
+                            fuelConsumptionPer100 = Double.parseDouble(valuesFromLine[12]);
+                        } else{
+                            engineCapacity = Double.parseDouble(valuesFromLine[9]);
+                            fuelTankCapacity = getDoubleFromCsv(valuesFromLine[10], valuesFromLine[11]);
+                            fuelConsumptionPer100 = Double.parseDouble(valuesFromLine[12]);
+                        }
+                    } else {
+                        engineCapacity = getDoubleFromCsv(valuesFromLine[9], valuesFromLine[10]);
+                        fuelTankCapacity = getDoubleFromCsv(valuesFromLine[11], valuesFromLine[12]);
+                        fuelConsumptionPer100 = Double.parseDouble(valuesFromLine[13]);
+                    }
+                }
+
+                combustionStartable.setEngineCapacity(engineCapacity);
+                combustionStartable.setFuelTankCapacity(fuelTankCapacity);
+                combustionStartable.setFuelConsumptionPer100(fuelConsumptionPer100);
+                engineList.add(combustionStartable);
+
+            } else {
+                //electrical
+                ElectricalStartable electricalStartable = new ElectricalStartable();
+                electricalStartable.setVehicleId(vehicleId);
+                electricalStartable.setTaxCoefficient(0.1);
+                if (!lineContainsQuotes) {
+                    electricalStartable.setBatterySize(Double.parseDouble(valuesFromLine[9]));
+                    electricalStartable.setElectricityConsumptionPer100(Double.parseDouble(valuesFromLine[10]));
+                } else {
+                    double batterySize;
+                    double electricityConsumption;
+                    if (checkQuoteNumber(line) && line.endsWith("\"")) {
+                        batterySize = Double.parseDouble(valuesFromLine[9]);
+                        electricityConsumption = getDoubleFromCsv(valuesFromLine[10], valuesFromLine[11]);
+                    } else if (checkQuoteNumber(line) && !line.endsWith("\"")) {
+                        batterySize = getDoubleFromCsv(valuesFromLine[9], valuesFromLine[10]);
+                        electricityConsumption = Double.parseDouble(valuesFromLine[11]);
+                    } else {
+                        batterySize = getDoubleFromCsv(valuesFromLine[9], valuesFromLine[10]);
+                        electricityConsumption = getDoubleFromCsv(valuesFromLine[11], valuesFromLine[12]);
+                    }
+
+                    electricalStartable.setBatterySize(batterySize);
+                    electricalStartable.setElectricityConsumptionPer100(electricityConsumption);
+                }
+
+                engineList.add(electricalStartable);
+            }
+        }
+
+        return engineList;
     }
 
     private static <T> T getEntityFromCsv(T t, Object... values) {
@@ -186,7 +286,8 @@ public class FileActions {
         }
     }
 
-    private static void setFieldsToNonElectricVehicleWithoutQuotes(Vehicle vehicle, List<VehicleType> vehicleTypes,
+    private static void setFieldsToNonElectricVehicleWithoutQuotes(Vehicle
+                                                                           vehicle, List<VehicleType> vehicleTypes,
                                                                    String[] values, boolean isGasolineEngine) {
         try {
             setDuplicatedLogicToVehicleFields(vehicle, values, vehicleTypes);
@@ -202,7 +303,8 @@ public class FileActions {
         }
     }
 
-    private static void setFieldsToElectricVehicleWithFourQuotes(Vehicle vehicle, List<VehicleType> vehicleTypes,
+    private static void setFieldsToElectricVehicleWithFourQuotes(Vehicle
+                                                                         vehicle, List<VehicleType> vehicleTypes,
                                                                  String[] values) {
         try {
             double prevDouble = getDoubleFromCsv(values[9], values[10]);
@@ -274,9 +376,14 @@ public class FileActions {
             String[] values = line.split(",");
             if (line.contains("\"")) {
                 rent.setId(Integer.parseInt(values[0]));
-                String[] dateParts = values[1].split("\\.");
-                rent.setRentalDate(LocalDate.of(Integer.parseInt(dateParts[2]),
-                        Integer.parseInt(dateParts[1]), Integer.parseInt(dateParts[0])));
+//                String[] dateParts = values[1].split("\\.");
+                try {
+                    rent.setRentalDate(dateFormatFromRents.parse(values[1]));
+                } catch (ParseException e) {
+                    throw new RuntimeException(e);
+                }
+//                rent.setRentalDate(LocalDate.of(Integer.parseInt(dateParts[2]),
+//                        Integer.parseInt(dateParts[1]), Integer.parseInt(dateParts[0])));
                 double doubleFromCsv = getDoubleFromCsv(values[2], values[3]);
                 rent.setRentCost(doubleFromCsv);
                 resultList.add(rent);
@@ -284,15 +391,22 @@ public class FileActions {
             }
 
             rent.setId(Integer.parseInt(values[0]));
-            String[] dateParts = values[1].split("\\.");
-            rent.setRentalDate(LocalDate.of(Integer.parseInt(dateParts[2]),
-                    Integer.parseInt(dateParts[1]), Integer.parseInt(dateParts[0])));
+//            String[] dateParts = values[1].split("\\.");
+            try {
+                rent.setRentalDate(dateFormatFromRents.parse(values[1]));
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+
+//            rent.setRentalDate(LocalDate.of(Integer.parseInt(dateParts[2]),
+//                    Integer.parseInt(dateParts[1]), Integer.parseInt(dateParts[0])));
             rent.setRentCost(Double.parseDouble(values[2]));
             resultList.add(rent);
         }
     }
 
-    private static void processLinesFromVehicleTypesCsv(List<VehicleType> resultList, List<String> linesFromFile) {
+    private static void processLinesFromVehicleTypesCsv
+            (List<VehicleType> resultList, List<String> linesFromFile) {
         for (String line : linesFromFile) {
             VehicleType vehicleType = new VehicleType();
             String[] values = line.split(",");

@@ -1,31 +1,31 @@
 package org.evgenysav.classes;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 public class Rent {
     private int id;
-    private LocalDate rentalDate;
+    private Date rentalDate;
     private double rentCost;
 
     public Rent() {
     }
 
-    public Rent(LocalDate rentalDate, double rentCost) {
+    public Rent(Date rentalDate, double rentCost) {
         this.rentalDate = rentalDate;
         this.rentCost = rentCost;
     }
 
-    public Rent(int id, LocalDate rentalDate, double rentCost) {
+    public Rent(int id, Date rentalDate, double rentCost) {
         this.id = id;
         this.rentalDate = rentalDate;
         this.rentCost = rentCost;
     }
 
-    public LocalDate getRentalDate() {
+    public Date getRentalDate() {
         return rentalDate;
     }
 
-    public void setRentalDate(LocalDate rentalDate) {
+    public void setRentalDate(Date rentalDate) {
         this.rentalDate = rentalDate;
     }
 

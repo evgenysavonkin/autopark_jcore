@@ -24,7 +24,7 @@ public class ApplicationContext implements Context {
     @SuppressWarnings("unchecked")
     @Override
     public <T> T getObject(Class<T> type) {
-        if (cache.contains(type)){
+        if (cache.contains(type)) {
             return cache.get(type);
         }
 
