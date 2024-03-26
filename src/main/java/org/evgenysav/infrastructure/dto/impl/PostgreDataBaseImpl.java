@@ -84,6 +84,7 @@ public class PostgreDataBaseImpl implements DataBaseService {
         for (Field field : obj.getClass().getDeclaredFields()) {
             if (field.isAnnotationPresent(ID.class)) {
                 idFieldName = field.getName();
+                break;
             }
         }
 
@@ -191,7 +192,6 @@ public class PostgreDataBaseImpl implements DataBaseService {
                 }
 
                 field.set(instance, resultSet.getObject(columnFieldName));
-
             }
         }
 

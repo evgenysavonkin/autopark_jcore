@@ -36,7 +36,6 @@ public class ConsoleApp {
                     } else {
                         System.out.println("Defected details count for auto \"" + e.getModelName() + "\" is " + e.getDefectCount());
                     }
-//                    mechanicService.repair(e);
                 });
     }
 
@@ -65,7 +64,6 @@ public class ConsoleApp {
 
     private static List<Vehicle> getBrokenVehicles(List<Vehicle> vehicles) {
         return vehicles.stream()
-//                .filter(x -> !mechanicService.detectBreaking(x).isEmpty())
                 .toList();
     }
 

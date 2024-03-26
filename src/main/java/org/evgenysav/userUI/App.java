@@ -117,7 +117,7 @@ public class App {
                 Vehicle vehicle;
                 try {
                     vehicle = vehicleCollection.getVehicleById(vehicleId);
-                } catch (IllegalArgumentException e){
+                } catch (IllegalArgumentException e) {
                     System.out.println();
                     System.err.println("Incorrect vehicle id!");
                     return;

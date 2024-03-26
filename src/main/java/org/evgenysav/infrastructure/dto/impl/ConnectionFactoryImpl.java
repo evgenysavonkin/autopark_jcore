@@ -26,6 +26,7 @@ public class ConnectionFactoryImpl implements ConnectionFactory {
     @SneakyThrows
     @InitMethod
     public void initConnection() {
+        Class.forName("org.postgresql.Driver");
         connection = DriverManager.getConnection(url, username, password);
     }
 
