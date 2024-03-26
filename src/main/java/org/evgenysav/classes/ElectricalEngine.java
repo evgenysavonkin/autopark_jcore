@@ -22,6 +22,11 @@ public class ElectricalEngine extends AbstractEngine {
         return batterySize / electricityConsumption;
     }
 
+    @Override
+    public String getStartableName() {
+        return "Electrical";
+    }
+
     public double getBatterySize() {
         return batterySize;
     }

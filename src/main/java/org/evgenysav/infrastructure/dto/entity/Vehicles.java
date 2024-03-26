@@ -68,7 +68,6 @@ public class Vehicles {
                 ", manufactureYear = " + manufactureYear +
                 ", mileage = " + mileage +
                 ", color = " + color +
-                ", tankVolume = " + tankVolume +
                 '}';
     }
 }

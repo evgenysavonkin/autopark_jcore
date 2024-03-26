@@ -2,10 +2,12 @@ package org.evgenysav.infrastructure.dto.service.impl;
 
 import org.evgenysav.classes.*;
 import org.evgenysav.classes_.VehicleCollection;
+import org.evgenysav.infrastructure.core.Context;
 import org.evgenysav.infrastructure.core.annotations.Autowired;
 import org.evgenysav.infrastructure.core.annotations.InitMethod;
 import org.evgenysav.infrastructure.dto.EntityManager;
 import org.evgenysav.infrastructure.dto.entity.*;
+import org.evgenysav.infrastructure.dto.service.ColorService;
 import org.evgenysav.infrastructure.dto.service.RentsService;
 import org.evgenysav.infrastructure.dto.service.VehicleService;
 
@@ -22,6 +24,9 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Autowired
     private RentsService rentsService;
+
+    @Autowired
+    private Context context;
 
     @InitMethod
     public void init() {
@@ -94,6 +99,17 @@ public class VehicleServiceImpl implements VehicleService {
                 break;
             }
         }
+
+        ColorService colorService = context.getObject(ColorService.class);
+
+        List<Color_> colors = colorService.getAll();
+        colors.stream()
+                .filter(color -> color.getVehicleId().equals(vehicle.getVehicleId()))
+                .forEach(color -> {
+                    String colorStr = color.getColor();
+                    Color.valueOf(colorStr.toUpperCase());
+                    vehicle.setColor(Color.valueOf(colorStr.toUpperCase()));
+                });
     }
 
     private void setVehicleType(Types vehicleTypeToConvert, Vehicles vehicle) {

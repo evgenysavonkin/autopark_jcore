@@ -2,7 +2,6 @@ package org.evgenysav.classes_;
 
 import org.evgenysav.classes.Fixer;
 import org.evgenysav.infrastructure.core.impl.ApplicationContext;
-import org.evgenysav.infrastructure.dto.entity.OrderEntries;
 import org.evgenysav.infrastructure.dto.service.*;
 
 import java.util.HashMap;
@@ -16,18 +15,17 @@ public class Main {
         ApplicationContext context = new ApplicationContext("org.evgenysav",
                 interfaceToImplementation);
         initAndInsertValuesInDB(context);
-        ScheduledMain scheduledMain = context.getObject(ScheduledMain.class);
-        scheduledMain.moveVehiclesToWorkRoom(context);
-        Thread.sleep(120_000);
+        VehicleService vehicleService = context.getObject(VehicleService.class);
+        vehicleService.getAll().forEach(System.out::println);
+
     }
 
     static void initAndInsertValuesInDB(ApplicationContext context) {
         context.getObject(VehicleService.class);
-        context.getObject(TypesService.class);
-        context.getObject(RentsService.class);
-        context.getObject(OrdersService.class);
-        context.getObject(OrderEntries.class);
         context.getObject(ElectricalEngineService.class);
         context.getObject(CombustionEngineService.class);
+        context.getObject(TypesService.class);
+        context.getObject(RentsService.class);
+        context.getObject(ColorService.class);
     }
 }
