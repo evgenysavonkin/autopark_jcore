@@ -2,6 +2,7 @@ package org.evgenysav.util;
 
 import org.evgenysav.classes.*;
 import org.evgenysav.exceptions.NotVehicleException;
+import org.evgenysav.infrastructure.dto.entity.Color_;
 import org.evgenysav.infrastructure.dto.entity.CombustionStartable;
 import org.evgenysav.infrastructure.dto.entity.ElectricalStartable;
 
@@ -11,7 +12,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,11 +64,24 @@ public class FileActions {
     }
 
     public static Path getPathFromFilename(String filename) {
-        Path currDirectory = Paths.get(System.getProperty("user.dir"));
-        return currDirectory.resolve("csv").resolve(filename + ".csv");
+        String absolutePath = "C:\\WORK\\Java\\Pet_projects\\java_core\\autopark\\csv";
+        return Paths.get(absolutePath, filename + ".csv");
     }
 
-    //object is engine
+    public static List<Color_> getColorsList(String fileName) throws IOException {
+        List<String> linesFromFile = getLinesFromFile(fileName);
+        List<Color_> colorsList = new ArrayList<>();
+        for (String line : linesFromFile) {
+            String[] lineValues = line.split(",");
+            Color_ color = new Color_();
+            color.setVehicleId(Long.parseLong(lineValues[0]));
+            color.setColor(lineValues[7]);
+            colorsList.add(color);
+        }
+
+        return colorsList;
+    }
+
     public static List<Object> getEngineListFromFile(String filename) throws IOException {
         List<String> linesFromFile = getLinesFromFile(filename);
         List<Object> engineList = new ArrayList<>();
@@ -107,11 +120,11 @@ public class FileActions {
                     if (valuesFromLine.length == 13) {
                         String[] tempValues = line.replaceFirst("\"", "!").split("!");
                         String[] splittedAfterEngine = tempValues[1].split(",");
-                        if (splittedAfterEngine.length != 3){
+                        if (splittedAfterEngine.length != 3) {
                             engineCapacity = getDoubleFromCsv(valuesFromLine[9], valuesFromLine[10]);
                             fuelTankCapacity = Double.parseDouble(valuesFromLine[11]);
                             fuelConsumptionPer100 = Double.parseDouble(valuesFromLine[12]);
-                        } else{
+                        } else {
                             engineCapacity = Double.parseDouble(valuesFromLine[9]);
                             fuelTankCapacity = getDoubleFromCsv(valuesFromLine[10], valuesFromLine[11]);
                             fuelConsumptionPer100 = Double.parseDouble(valuesFromLine[12]);
@@ -129,7 +142,6 @@ public class FileActions {
                 engineList.add(combustionStartable);
 
             } else {
-                //electrical
                 ElectricalStartable electricalStartable = new ElectricalStartable();
                 electricalStartable.setVehicleId(vehicleId);
                 electricalStartable.setTaxCoefficient(0.1);
@@ -376,14 +388,11 @@ public class FileActions {
             String[] values = line.split(",");
             if (line.contains("\"")) {
                 rent.setId(Integer.parseInt(values[0]));
-//                String[] dateParts = values[1].split("\\.");
                 try {
                     rent.setRentalDate(dateFormatFromRents.parse(values[1]));
                 } catch (ParseException e) {
                     throw new RuntimeException(e);
                 }
-//                rent.setRentalDate(LocalDate.of(Integer.parseInt(dateParts[2]),
-//                        Integer.parseInt(dateParts[1]), Integer.parseInt(dateParts[0])));
                 double doubleFromCsv = getDoubleFromCsv(values[2], values[3]);
                 rent.setRentCost(doubleFromCsv);
                 resultList.add(rent);
@@ -391,15 +400,12 @@ public class FileActions {
             }
 
             rent.setId(Integer.parseInt(values[0]));
-//            String[] dateParts = values[1].split("\\.");
             try {
                 rent.setRentalDate(dateFormatFromRents.parse(values[1]));
             } catch (ParseException e) {
                 throw new RuntimeException(e);
             }
 
-//            rent.setRentalDate(LocalDate.of(Integer.parseInt(dateParts[2]),
-//                    Integer.parseInt(dateParts[1]), Integer.parseInt(dateParts[0])));
             rent.setRentCost(Double.parseDouble(values[2]));
             resultList.add(rent);
         }

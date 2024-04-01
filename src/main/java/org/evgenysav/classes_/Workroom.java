@@ -3,6 +3,7 @@ package org.evgenysav.classes_;
 import org.evgenysav.classes.Fixer;
 import org.evgenysav.classes.Vehicle;
 import org.evgenysav.infrastructure.core.annotations.Autowired;
+import org.evgenysav.infrastructure.dto.classes_dto.VehicleDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,5 +32,11 @@ public class Workroom {
 
         System.out.println();
         vehicles.forEach(mechanic::repair);
+    }
+
+    public boolean wasBroken(VehicleDto vehicleDto) {
+        Vehicle vehicle = new Vehicle();
+        vehicle.setVehicleId(Math.toIntExact(vehicleDto.getVehicleId()));
+        return mechanic.isBroken(vehicle);
     }
 }
