@@ -36,6 +36,7 @@
                 <th>Дата выпуска</th>
                 <th>Цвет</th>
                 <th>Тип двигателя</th>
+                <th>Бак</th>
                 <th>Пробег</th>
                 <th>Расход</th>
                 <th>Коэффициент налога</th>
@@ -72,6 +73,9 @@
                 <td><%=dto.getEngineName()%>
                 </td>
 
+                <td><%=dto.getTankVolume()%>
+                </td>
+
                 <td><%=dto.getMileage()%>
                 </td>
 
@@ -94,7 +98,7 @@
 
             <strong>
                 <%
-                    VehicleDto firstDto = dtoList.getFirst();
+                    VehicleDto firstDto = dtoList.get(0);
                 %>
 
                 <%=

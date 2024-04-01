@@ -14,10 +14,14 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class FileActions {
 
     private static final SimpleDateFormat dateFormatFromRents = new SimpleDateFormat("dd.MM.yyyy");
+    private static final Random random = new Random();
+    private static final int MIN_TANK_VOL = 20;
+    private static final int MAX_TANK_VOL = 130;
 
     private FileActions() {
     }
@@ -250,6 +254,7 @@ public class FileActions {
                 }
             }
             setRentsListToVehicle(vehicle, rents);
+            vehicle.setTankVolume(random.nextInt(MAX_TANK_VOL - MIN_TANK_VOL) + MIN_TANK_VOL + 1);
             resultList.add(vehicle);
         }
     }

@@ -1,7 +1,6 @@
 package org.evgenysav.infrastructure.dto.service;
 
 import org.evgenysav.infrastructure.dto.entity.Orders;
-import org.evgenysav.infrastructure.dto.entity.Rents;
 
 import java.util.List;
 
@@ -11,4 +10,6 @@ public interface OrdersService {
     List<Orders> getAll();
 
     Long save(Orders rent);
+
+    void remove(Object obj, String fieldName, Long fieldId);
 }

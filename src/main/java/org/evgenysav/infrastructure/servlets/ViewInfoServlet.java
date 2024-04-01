@@ -34,13 +34,15 @@ public class ViewInfoServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        int id = Integer.parseInt(req.getParameter("id"));
-        req.setAttribute("cars", getVehiclesDto().stream()
-                .filter(vehicle -> id == vehicle.getVehicleId())
-                .toList());
-        req.setAttribute("rents", getRentsDto().stream()
-                .filter(rent -> rent.getVehicleId() == id)
-                .toList());
+        synchronized (this) {
+            int id = Integer.parseInt(req.getParameter("id"));
+            req.setAttribute("cars", getVehiclesDto().stream()
+                    .filter(vehicle -> id == vehicle.getVehicleId())
+                    .toList());
+            req.setAttribute("rents", getRentsDto().stream()
+                    .filter(rent -> rent.getVehicleId() == id)
+                    .toList());
+        }
 
         RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/jsp/viewCarInfoJSP.jsp");
         dispatcher.forward(req, resp);

@@ -29,7 +29,10 @@ public class ViewPlannedDiagnosticsServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setAttribute("cars", getVehiclesDto());
+        synchronized (this) {
+            req.setAttribute("cars", getVehiclesDto());
+        }
+
         RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/jsp/viewPlannedDiagnosticJSP.jsp");
         dispatcher.forward(req, resp);
     }

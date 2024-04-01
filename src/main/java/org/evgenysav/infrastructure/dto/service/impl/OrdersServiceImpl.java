@@ -28,4 +28,9 @@ public class OrdersServiceImpl implements OrdersService {
     public Long save(Orders rent) {
         return entityManager.save(rent);
     }
+
+    @Override
+    public void remove(Object obj, String fieldName, Long fieldId) {
+        entityManager.remove(obj, fieldName, fieldId);
+    }
 }

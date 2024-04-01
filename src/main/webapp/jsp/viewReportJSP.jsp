@@ -38,6 +38,7 @@
                 <th>Цвет</th>
                 <th>Тип двигателя</th>
                 <th>Пробег</th>
+                <th>Бак</th>
                 <th>Доход с аренд</th>
                 <th>Налог</th>
                 <th>Итог</th>
@@ -74,6 +75,9 @@
                 </td>
 
                 <td><%=dto.getMileage()%>
+                </td>
+
+                <td><%= dto.getTankVolume()%>
                 </td>
 
                 <td><%=

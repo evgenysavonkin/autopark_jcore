@@ -63,6 +63,9 @@ public class PostgreDataBaseImpl implements DataBaseService {
                     "VALUES (%s)\n" +
                     "RETURNING %s ;";
 
+    private static final String DELETE_SQL_PATTERN =
+            "DELETE FROM %s WHERE %s = %d";
+
     private static final String FOREIGN_KEY_PATTERN = "FOREIGN KEY (%s) REFERENCES %s (%s)\n " +
             "ON DELETE CASCADE\n ON UPDATE CASCADE);";
 
@@ -74,6 +77,16 @@ public class PostgreDataBaseImpl implements DataBaseService {
         classToSql = new HashMap<>();
         insertPatternByClass = new HashMap<>();
         insertByClassPattern = new HashMap<>();
+    }
+
+    @SneakyThrows
+    public void remove(Object obj, String fieldName, Long fieldId) {
+        String tableName = obj.getClass().getAnnotation(Table.class).name();
+        String SQL = String.format(DELETE_SQL_PATTERN, tableName, fieldName, fieldId);
+        try (Connection connection = connectionFactory.getConnection();
+             Statement statement = connection.createStatement()) {
+            statement.executeUpdate(SQL);
+        }
     }
 
     @SneakyThrows

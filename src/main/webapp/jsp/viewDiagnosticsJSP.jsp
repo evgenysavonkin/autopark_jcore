@@ -23,6 +23,7 @@
             List<VehicleDto> dtoList = (List<VehicleDto>) request.getAttribute("cars");
             ApplicationContext applicationContext = (ApplicationContext) request.getServletContext().getAttribute("applicationContext");
             Workroom workroom = applicationContext.getObject(Workroom.class);
+            dtoList.forEach(workroom::detectBreaking);
         %>
 
         <a class="ml-20" href="/">На главную</a>
@@ -41,6 +42,7 @@
                 <th>Цвет</th>
                 <th>Тип двигателя</th>
                 <th>Пробег</th>
+                <th>Бак</th>
                 <th>Была исправна</th>
                 <th>Починена</th>
             </tr>
@@ -77,12 +79,18 @@
 
                 <td><%=dto.getMileage()%>
                 </td>
+
+                <td><%= dto.getTankVolume()%>
+                </td>
                 <%
                     String wasNormal = "";
                     String wasRepaired = "";
-                    if (!workroom.wasBroken(dto)) {
-                        wasNormal = "да";
+                    if (workroom.wasBroken(dto)) {
+                        wasRepaired = "да";
+                        wasNormal = "нет";
+                    } else {
                         wasRepaired = "нет";
+                        wasNormal = "да";
                     }
                 %>
                 <td>
@@ -94,6 +102,7 @@
                 </td>
             </tr>
             <%}%>
+            <% dtoList.forEach(workroom::repair);%>
         </table>
         <br/>
     </div>

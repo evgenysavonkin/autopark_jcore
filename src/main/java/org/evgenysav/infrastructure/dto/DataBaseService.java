@@ -9,4 +9,6 @@ public interface DataBaseService {
     <T> Optional<T> get(Long id, Class<T> clazz);
 
     <T> List<T> getAll(Class<T> clazz);
+
+    void remove(Object obj, String fieldName, Long fieldId);
 }

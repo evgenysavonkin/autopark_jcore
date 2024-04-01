@@ -1,11 +1,5 @@
-<%@ page import="java.util.Set" %>
 <%@ page import="org.evgenysav.infrastructure.dto.classes_dto.VehicleDto" %>
 <%@ page import="java.util.List" %>
-<%@ page import="java.util.stream.Collectors" %>
-<%@ page import="java.util.concurrent.atomic.AtomicReference" %>
-<%@ page import="java.util.function.Predicate" %>
-<%@ page import="java.util.Optional" %>
-<%@ page import="org.evgenysav.infrastructure.dto.classes_dto.RentDto" %>
 <%@ page import="org.evgenysav.infrastructure.core.impl.ApplicationContext" %>
 <%@ page import="org.evgenysav.classes_.Workroom" %>
 <%@ page contentType="text/html;charset=utf-8" %>
@@ -23,6 +17,7 @@
             List<VehicleDto> dtoList = (List<VehicleDto>) request.getAttribute("cars");
             ApplicationContext applicationContext = (ApplicationContext) request.getServletContext().getAttribute("applicationContext");
             Workroom workroom = applicationContext.getObject(Workroom.class);
+            dtoList.forEach(workroom::detectBreaking);
         %>
 
         <a class="ml-20" href="/">На главную</a>
@@ -43,6 +38,7 @@
                 <th>Цвет</th>
                 <th>Тип двигателя</th>
                 <th>Пробег</th>
+                <th>Бак</th>
                 <th>Была исправна</th>
                 <th>Починена</th>
             </tr>
@@ -79,12 +75,18 @@
 
                 <td><%=dto.getMileage()%>
                 </td>
+
+                <td><%= dto.getTankVolume()%>
+                </td>
                 <%
                     String wasNormal = "";
                     String wasRepaired = "";
-                    if (!workroom.wasBroken(dto)) {
-                        wasNormal = "да";
+                    if (workroom.wasBroken(dto)) {
+                        wasRepaired = "да";
+                        wasNormal = "нет";
+                    } else {
                         wasRepaired = "нет";
+                        wasNormal = "да";
                     }
                 %>
                 <td>
@@ -96,6 +98,7 @@
                 </td>
             </tr>
             <%}%>
+            <% dtoList.forEach(workroom::repair);%>
         </table>
         <br/>
     </div>

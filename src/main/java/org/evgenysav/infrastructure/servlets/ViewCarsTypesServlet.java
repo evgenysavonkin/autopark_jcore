@@ -29,7 +29,10 @@ public class ViewCarsTypesServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setAttribute("types", getTypesDto());
+        synchronized (this) {
+            req.setAttribute("types", getTypesDto());
+        }
+
         RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/jsp/viewTypesJSP.jsp");
         dispatcher.forward(req, resp);
     }

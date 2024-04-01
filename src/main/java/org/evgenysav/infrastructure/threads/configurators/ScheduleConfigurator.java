@@ -10,10 +10,7 @@ import org.evgenysav.infrastructure.threads.annotations.Schedule;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.TimeoutException;
+import java.util.concurrent.*;
 
 public class ScheduleConfigurator implements ProxyConfigurator {
 

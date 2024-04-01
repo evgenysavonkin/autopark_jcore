@@ -34,8 +34,11 @@ public class ViewReportServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setAttribute("cars", getVehiclesDto());
-        req.setAttribute("rents", getRentsDto());
+        synchronized (this) {
+            req.setAttribute("cars", getVehiclesDto());
+            req.setAttribute("rents", getRentsDto());
+        }
+
         RequestDispatcher dispatcher = this.getServletContext().getRequestDispatcher("/jsp/viewReportJSP.jsp");
         dispatcher.forward(req, resp);
     }

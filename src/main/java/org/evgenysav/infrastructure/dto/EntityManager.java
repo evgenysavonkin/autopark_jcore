@@ -9,4 +9,6 @@ public interface EntityManager {
     Long save(Object object);
 
     <T> List<T> getAll(Class<T> clazz);
+
+    void remove(Object obj, String fieldName, Long fieldId);
 }

@@ -57,6 +57,7 @@
                 <th>Цвет</th>
                 <th>Тип двигателя</th>
                 <th>Пробег</th>
+                <th>Бак</th>
             </tr>
 
             <%if (dtoList.size() == 0) {%>
@@ -90,6 +91,9 @@
                 </td>
 
                 <td><%=dto.getMileage()%>
+                </td>
+
+                <td><%= dto.getTankVolume()%>
                 </td>
             </tr>
             <%}%>

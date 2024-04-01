@@ -54,6 +54,7 @@ public class DtoConverter {
                     }
                     vehicleDto.setMaxKm(engine.getMaxKilometers());
                     vehicleDto.setTax(engine.getTaxPerMonth());
+                    vehicleDto.setTankVolume(vehicleFromDB.getTankVolume());
                     return vehicleDto;
                 }).toList();
     }
