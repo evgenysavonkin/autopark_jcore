@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet("/info")
@@ -36,9 +37,20 @@ public class ViewInfoServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         synchronized (this) {
             int id = Integer.parseInt(req.getParameter("id"));
-            req.setAttribute("cars", getVehiclesDto().stream()
-                    .filter(vehicle -> id == vehicle.getVehicleId())
-                    .toList());
+            List<VehicleDto> vehiclesWithId = new ArrayList<>();
+            for (VehicleDto vehicleDto : getVehiclesDto()) {
+                if (vehicleDto.getVehicleId() == id) {
+                    vehiclesWithId.add(vehicleDto);
+                }
+            }
+
+            if (vehiclesWithId.isEmpty()) {
+                this.getServletContext().getRequestDispatcher("/viewCars").forward(req, resp);
+                return;
+            } else {
+                req.setAttribute("cars", vehiclesWithId);
+            }
+
             req.setAttribute("rents", getRentsDto().stream()
                     .filter(rent -> rent.getVehicleId() == id)
                     .toList());

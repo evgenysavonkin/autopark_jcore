@@ -13,7 +13,7 @@
 <body>
 <div class="center flex full-vh">
     <div class="vertical-center">
-        <a class="ml-20" href="/">На главную</a>
+        <a class="ml-20" href="${pageContext.request.contextPath}/">На главную</a>
         <br/>
         <br/>
         <hr/>

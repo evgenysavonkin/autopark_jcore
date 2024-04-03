@@ -27,6 +27,32 @@ form {
     margin-top: 20px;
 }
 
+form label {
+    margin-bottom: 5px;
+}
+
+form input[type="text"] {
+    width: 200px;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+}
+
+form button {
+    padding: 10px 20px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+}
+
+form button:hover {
+    background-color: #0056b3;
+}
+
 .select-block p {
     margin-bottom: 5px;
 }

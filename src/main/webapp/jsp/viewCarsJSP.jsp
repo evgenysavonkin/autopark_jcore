@@ -12,6 +12,40 @@
     <meta charset="UTF-8">
     <title>Автомобили</title>
     <link href="${pageContext.request.contextPath}/resources/css/style.css" rel="stylesheet">
+    <style>
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        form label {
+            margin-bottom: 5px;
+        }
+
+        form input[type="text"] {
+            width: 200px;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            background-color: #fff;
+        }
+
+        form button {
+            padding: 10px 20px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        form button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
 <div class="center flex full-vh">
@@ -32,8 +66,24 @@
                 filter.set(filter.get().and(vehicleDto -> vehicleDto.getTypeName().equals(s)));
             });
 
+            if (request.getParameter("model") != null) {
+
+            }
+
+            Optional.ofNullable(request.getParameter("model"))
+                    .map(s -> s.replaceAll("\\s+", " "))
+                    .map(s -> s.replaceAll("\\r?\\n", ""))
+                    .filter(s ->
+                            !s.isEmpty()).ifPresent(s -> {
+                        filter.set(filter.get().and(vehicleDto -> vehicleDto.getModelName().equals(s)));
+                    });
+
             Optional.ofNullable(request.getParameter("engine")).filter(s -> !s.isEmpty()).ifPresent(s -> {
                 filter.set(filter.get().and(vehicleDto -> vehicleDto.getEngineName().equals(s)));
+            });
+
+            Optional.ofNullable(request.getParameter("color")).filter(s -> !s.isEmpty()).ifPresent(s -> {
+                filter.set(filter.get().and(vehicleDto -> vehicleDto.getColor().equalsIgnoreCase(s)));
             });
 
             dtoList = dtoList.stream()
@@ -49,6 +99,7 @@
         <table>
             <caption>Автомобили</caption>
             <tr>
+                <th>id</th>
                 <th>Тип</th>
                 <th>Модель</th>
                 <th>Регистрационный номер</th>
@@ -71,6 +122,8 @@
                 for (VehicleDto dto : dtoList) {
             %>
             <tr>
+                <td><%=dto.getVehicleId()%>
+                </td>
                 <td><%=dto.getTypeName()%>
                 </td>
                 <td><%=dto.getModelName()%>
@@ -127,8 +180,7 @@
                         <%
                             for (String s : uniqModels) {
                         %>
-                        <option value="
-                        <%=s%>"
+                        <option value="<%=s%>"
                                 <%=(request.getParameter("model") != null && s.equals(request.getParameter("model")) ? "selected" : ""
                                 )%>><%=s%>
                         </option>
@@ -169,6 +221,12 @@
             <br/>
             <hr/>
         </div>
+        <form method="get" action="/info">
+            <label for="id">Введите id авто для детальной информации:</label>
+            <br>
+            <input type="text" id="id" name="id">
+            <button class="ml-20" type="submit">Получить информацию</button>
+        </form>
     </div>
 </div>
 </body>
